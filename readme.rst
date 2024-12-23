@@ -31,7 +31,8 @@
    :alt: Cirq project on PyPI
   
 .. raw:: html
-   :file: start.html
+
+   <div align="center">
   
 .. image:: https://raw.githubusercontent.com/quantumlib/Cirq/refs/heads/main/docs/images/Cirq_logo_color.svg
    :width: 280px
