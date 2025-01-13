@@ -2,7 +2,7 @@
 
 name: Python file checks
 run-name: >
-  Performing Python lint & format checks for ${{github.event_name}}
+  Python lint & format checks for ${{github.event_name}}
   by ${{github.triggering_actor}}
 
 env:
@@ -42,7 +42,7 @@ concurrency:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint Python files
     runs-on: ubuntu-22.04
     steps:
       - name: Check out a copy of the TFQ git repository
@@ -71,7 +71,7 @@ jobs:
                   break
                 fi
               fi
-            done < "$git_root/requirements.txt"
+            done < "requirements.txt"
           fi
 
       - name: Install Pylint
