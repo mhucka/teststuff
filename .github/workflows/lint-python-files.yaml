@@ -59,7 +59,7 @@ jobs:
         with:
           python-version: ${{inputs.python_ver || env.python_ver}}
 
-      - name: Set various parameters
+      - name: Set cache parameters
         id: parameters
         run: |
           key="${{github.workflow_ref}}-${{hashFiles('requirements.txt')}}"
@@ -141,7 +141,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{inputs.python_ver || env.python_ver}}
-          cache: 'pip'
+
+      - name: Restore our Python cache
+        uses: actions/cache@v4
+        with:
+          key: ${{needs.setup.outputs.python_cache_key}}
+          path: ${{needs.setup.outputs.python_cache_paths}}
+
 
       - name: Run Pylint
         run: |
