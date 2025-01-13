@@ -76,7 +76,7 @@ jobs:
 
       - name: Install Pylint
         run: |
-          python -m pip install pylint==${{step.req.outputs.pylint_version}}
+          python -m pip install pylint==${{steps.req.outputs.pylint_version}}
 
       - name: Run Pylint
         run: |
