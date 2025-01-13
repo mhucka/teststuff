@@ -7,7 +7,7 @@ run-name: >
 
 env:
   # Python version to use. Can be overridden when workflow dispatch is used.
-  py_version: '3.12'
+  python_ver: '3.10.15'
 
 on:
   pull_request:
@@ -38,16 +38,17 @@ on:
 
 # Cancel previously-started but still active workflow runs on the same branch.
 concurrency:
-  group: ${{github.ref}}-${{github.workflow}}
+  group: ${{github.workflow}}-${{github.event.pull_request.number||github.ref}}
   cancel-in-progress: true
 
 jobs:
   setup:
     name: Set up Python environment
     runs-on: ubuntu-22.04
+    timeout-minutes: 5
     outputs:
-      python_cache_key: ${{steps.parameters.outputs.python_cache_key}}
-      python_cache_paths: ${{steps.parameters.outputs.python_cache_paths}}
+      cache_key: ${{steps.parameters.outputs.cache_key}}
+      cache_paths: ${{steps.parameters.outputs.cache_paths}}
     steps:
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
@@ -57,18 +58,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{inputs.py_version || env.py_version}}
+          python-version: ${{inputs.python_ver || env.python_ver}}
 
       - name: Set cache parameters
         id: parameters
         run: |
           key="${{github.workflow_ref}}-${{hashFiles('requirements.txt')}}"
-          echo "python_cache_key=$key" >> "$GITHUB_OUTPUT"
+          echo "cache_key=$key" >> "$GITHUB_OUTPUT"
           # The paths used for actions/cache need to be on separate lines.
           # Constructing a multiline value for an output variable is awkward.
           # shellcheck disable=SC2005
           {
-          echo 'python_cache_paths<<EOF'
+          echo 'cache_paths<<EOF'
           echo "$(pip cache dir)"
           echo "${{env.pythonLocation}}"
           echo 'EOF'
@@ -79,16 +80,16 @@ jobs:
         id: check_cache
         with:
           lookup-only: true
-          key: ${{steps.parameters.outputs.python_cache_key}}
-          path: ${{steps.parameters.outputs.python_cache_paths}}
+          key: ${{steps.parameters.outputs.cache_key}}
+          path: ${{steps.parameters.outputs.cache_paths}}
 
       - if: steps.check_cache.outputs.cache-hit != 'true'
         name: Set up the cache
         uses: actions/cache@v4
         id: restore_cache
         with:
-          key: ${{steps.parameters.outputs.python_cache_key}}
-          path: ${{steps.parameters.outputs.python_cache_paths}}
+          key: ${{steps.parameters.outputs.cache_key}}
+          path: ${{steps.parameters.outputs.cache_paths}}
 
       - if: steps.check_cache.outputs.cache-hit != 'true'
         name: Determine the versions of Pylint and Yapf to use
@@ -140,18 +141,25 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{inputs.py_version || env.py_version}}
+          python-version: ${{inputs.python_ver || env.python_ver}}
 
-      - name: Restore our Python cache
+      - name: Restore the Python cache
         uses: actions/cache@v4
         with:
-          key: ${{needs.setup.outputs.python_cache_key}}
-          path: ${{needs.setup.outputs.python_cache_paths}}
+          key: ${{needs.setup.outputs.cache_key}}
+          path: ${{needs.setup.outputs.cache_paths}}
+          fail-on-cache-miss: true
 
-      - name: Run Pylint
+      - name: Get the list of Python files changed in the triggering event
+        id: changes
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            **.py
+
+      - name: Foo
         run: |
-          pylint --rcfile .pylintrc ./benchmarks ./release ./tensorflow_quantum
-
+          echo "${{steps.changes.outputs.all_changed_files}}"
 
 
 
