@@ -7,7 +7,7 @@ run-name: >
 
 env:
   # Python version to use. Can be overridden when workflow dispatch is used.
-  python_ver: '3.11'
+  python_ver: '3.10'
 
 on:
   pull_request:
