@@ -6,7 +6,8 @@ run-name: >
   by ${{github.triggering_actor}}
 
 env:
-  python_ver: '3.10.15'
+  # Python version to use. Can be overridden when workflow dispatch is used.
+  py_version: '3.12'
 
 on:
   pull_request:
@@ -55,6 +56,8 @@ jobs:
         # because we want to cache more Python things than setup-python does.
       - name: Set up Python
         uses: actions/setup-python@v5
+        with:
+          python-version: ${{inputs.py_version || env.py_version}}
 
       - name: Set cache parameters
         id: parameters
@@ -136,6 +139,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
+        with:
+          python-version: ${{inputs.py_version || env.py_version}}
 
       - name: Restore our Python cache
         uses: actions/cache@v4
