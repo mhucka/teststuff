@@ -131,6 +131,7 @@ jobs:
 
   lint:
     name: Lint Python files
+    needs: setup
     runs-on: ubuntu-22.04
     steps:
       - name: Check out a copy of the TFQ git repository
