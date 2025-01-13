@@ -1,5 +1,5 @@
 
 def function():
-    print("foo")
-
-
+    print(
+        "foo"
+    )

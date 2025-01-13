@@ -160,11 +160,32 @@ jobs:
           files: |
             **.py
 
-      - name: Foo
+      - name: Set up lint output problem matcher
+        run: echo "::add-matcher::.github/problem-matchers/pylint.json"
+
+      - name: Lint the changed Python files
         run: |
           pylint "${{steps.changes.outputs.all_changed_files}}"
 
+  # format:
+  #   name: Check the format of Python files
+  #   needs: setup
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Check out a copy of the TFQ git repository
+  #       uses: actions/checkout@v4
 
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: ${{inputs.python_ver || env.python_ver}}
+
+  #     - name: Restore the Python cache
+  #       uses: actions/cache@v4
+  #       with:
+  #         key: ${{needs.setup.outputs.cache_key}}
+  #         path: ${{needs.setup.outputs.cache_paths}}
+  #         fail-on-cache-miss: true
 
   # format:
   #   name: Format
