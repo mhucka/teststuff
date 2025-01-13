@@ -167,41 +167,46 @@ jobs:
         run: |
           pylint "${{steps.changes.outputs.all_changed_files}}"
 
-  # format:
-  #   name: Check the format of Python files
-  #   needs: setup
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: Check out a copy of the TFQ git repository
-  #       uses: actions/checkout@v4
+  format:
+    name: Check the format of Python files
+    needs: setup
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out a copy of the TFQ git repository
+        uses: actions/checkout@v4
 
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version: ${{inputs.python_ver || env.python_ver}}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{inputs.python_ver || env.python_ver}}
 
-  #     - name: Restore the Python cache
-  #       uses: actions/cache@v4
-  #       with:
-  #         key: ${{needs.setup.outputs.cache_key}}
-  #         path: ${{needs.setup.outputs.cache_paths}}
-  #         fail-on-cache-miss: true
+      - name: Restore the Python cache
+        uses: actions/cache@v4
+        with:
+          key: ${{needs.setup.outputs.cache_key}}
+          path: ${{needs.setup.outputs.cache_paths}}
+          fail-on-cache-miss: true
 
-  # format:
-  #   name: Format
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: Check out a copy of the TFQ git repository
-  #       uses: actions/checkout@v4
+      - name: Get the list of Python files changed in the triggering event
+        id: changes
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            **.py
 
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version: ${{inputs.python_ver || env.python_ver}}
-  #         cache: 'pip'
-
-  #     - name: Install Yapf
-  #       run: |
-  #         python -m pip install --upgrade pip
-  #         python -m pip install yapf==${{inputs.yapf_ver || env.yapf_ver}}
-          
+      - name: Run Yapf on the Python changed files
+        id: yapf
+        run: |
+          yapf -p -d --style=google \
+            "${{steps.changes.outputs.all_changed_files}}" > diff.out
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          if [[ -s ./diff.out ]]; then
+            {
+            echo "## Yapf output"
+            echo ""
+            echo '```diff'
+            echo "$(< diff.out)"
+            echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit ${{steps.yapf.outputs.exit_code}}
