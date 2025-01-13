@@ -41,6 +41,94 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  setup:
+    name: Set up Python environment
+    runs-on: ubuntu-22.04
+    outputs:
+      python_cache_key: ${{steps.parameters.outputs.python_cache_key}}
+      python_cache_paths: ${{steps.parameters.outputs.python_cache_paths}}
+    steps:
+      - name: Check out a copy of the TFQ git repository
+        uses: actions/checkout@v4
+
+        # Note: setup-python has a cache facility, but we don't use it here
+        # because we want to cache more Python things than setup-python does.
+      - name: Set up Python
+        id: python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{inputs.python_ver || env.python_ver}}
+
+      - name: Set various parameters
+        id: parameters
+        run: |
+          key="${{github.workflow_ref}}-${{hashFiles('requirements.txt')}}"
+          echo "python_cache_key=$key" >> "$GITHUB_OUTPUT"
+          # The paths used for actions/cache need to be on separate lines.
+          # Constructing a multiline value for an output variable is awkward.
+          # shellcheck disable=SC2005
+          {
+          echo 'python_cache_paths<<EOF'
+          echo "$(pip cache dir)"
+          echo "${{env.pythonLocation}}"
+          echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Test if the cache already exists
+        uses: actions/cache@v4
+        id: check_cache
+        with:
+          lookup-only: true
+          key: ${{steps.parameters.outputs.python_cache_key}}
+          path: ${{steps.parameters.outputs.python_cache_paths}}
+
+      - if: steps.check_cache.outputs.cache-hit != 'true'
+        name: Set up the cache
+        uses: actions/cache@v4
+        id: restore_cache
+        with:
+          key: ${{steps.parameters.outputs.python_cache_key}}
+          path: ${{steps.parameters.outputs.python_cache_paths}}
+
+      - if: steps.check_cache.outputs.cache-hit != 'true'
+        name: Determine the versions of Pylint and Yapf to use
+        id: req
+        run: |
+          echo "pylint_version=" >> "$GITHUB_OUTPUT"
+          echo "yapf_version=" >> "$GITHUB_OUTPUT"
+          # Look for the entries in requirements.txt.
+          # In case of multiple values in the file, the last one will win.
+          number_regex='[0-9]+(\.[0-9]+)?(\.[0-9]+)?'
+          while IFS= read -r line; do
+            if [[ $line =~ ^pylint.* ]]; then
+              if [[ $line =~ $number_regex ]]; then
+                version="${BASH_REMATCH[0]}"
+                echo "pylint_version=$version" >> "$GITHUB_OUTPUT"
+                continue
+              fi
+            fi
+            if [[ $line =~ ^yapf.* ]]; then
+              if [[ $line =~ $number_regex ]]; then
+                version="${BASH_REMATCH[0]}"
+                echo "yapf_version=$version" >> "$GITHUB_OUTPUT"
+                continue
+              fi
+            fi
+          done < "requirements.txt"
+          # If given a version, use that instead of what's in requirements.txt.
+          if [[ "${{inputs.pylint_ver}}" != "" ]]; then
+            echo "pylint_version=${{inputs.pylint_ver}}" >> "$GITHUB_OUTPUT"
+          fi
+          if [[ "${{inputs.yapf_ver}}" != "" ]]; then
+            echo "yapf_version=${{inputs.yapf_ver}}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.check_cache.outputs.cache-hit != 'true'
+        name: Install Pylint and Yapf
+        run: |
+          python -m pip install pylint==${{steps.req.outputs.pylint_version}}
+          python -m pip install yapf==${{steps.req.outputs.yapf_version}}
+
   lint:
     name: Lint Python files
     runs-on: ubuntu-22.04
@@ -53,30 +141,6 @@ jobs:
         with:
           python-version: ${{inputs.python_ver || env.python_ver}}
           cache: 'pip'
-
-      - name: Determine the version of Pylint to use
-        id: req
-        run: |
-          # If given a version, use that, else get it from requirements.txt.
-          if [[ "${{inputs.pylint_ver}}" != "" ]]; then
-            echo "pylint_version=${{inputs.pylint_ver}}" >> "$GITHUB_OUTPUT"
-          else
-            echo "pylint_version=" >> "$GITHUB_OUTPUT"
-            number_regex='[0-9]+(\.[0-9]+)?(\.[0-9]+)?'
-            while IFS= read -r line; do
-              if [[ $line =~ ^pylint.* ]]; then
-                if [[ $line =~ $number_regex ]]; then
-                  version="${BASH_REMATCH[0]}"
-                  echo "pylint_version=$version" >> "$GITHUB_OUTPUT"
-                  break
-                fi
-              fi
-            done < "requirements.txt"
-          fi
-
-      - name: Install Pylint
-        run: |
-          python -m pip install pylint==${{steps.req.outputs.pylint_version}}
 
       - name: Run Pylint
         run: |
