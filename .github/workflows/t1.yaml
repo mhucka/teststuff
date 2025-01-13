@@ -1,0 +1,16 @@
+name: Test 1
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{github.ref}}-${{github.workflow}}
+  cancel-in-progress: true
+
+jobs:
+  test1:
+    name: Lint Python files
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Test
+        run: echo "hi"
