@@ -1,5 +1,3 @@
-        with:
-          python-version: ${{inputs.python_ver || env.python_ver}}
 # Summary: GitHub CI workflow for checking Python files.
 
 name: Python file checks
