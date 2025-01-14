@@ -31,14 +31,15 @@ on:
   # For manual invocation, with options that might be useful for debugging.
   workflow_dispatch:
     inputs:
+      files:
+        description: "Files and/or directories to check:"
+        type: string
       python_ver:
         description: 'Python version:'
         type: string
-
       pylint_ver:
         description: 'Pylint version:'
         type: string
-
       yapf_ver:
         description: 'Yapf version:'
         type: string
@@ -56,6 +57,7 @@ jobs:
     outputs:
       cache_key: ${{steps.parameters.outputs.cache_key}}
       cache_paths: ${{steps.parameters.outputs.cache_paths}}
+      files: ${{steps.parameters.outputs.files_to_check}}
     steps:
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
@@ -98,14 +100,37 @@ jobs:
           key: ${{steps.parameters.outputs.cache_key}}
           path: ${{steps.parameters.outputs.cache_paths}}
 
+      - if: github.event_name != 'workflow_dispatch'
+        name: Get the list of Python files changed in the triggering event
+        id: changes
+        uses: tj-actions/changed-files@v45
+        # Although this workflow is triggered only if Python files are changed,
+        # they might not be the *only* files changed; hence, we have to filter
+        # the set of files down to just the Python files.
+        with:
+          files: |
+            **.py
+
       - if: steps.check_cache.outputs.cache-hit != 'true'
         name: Determine the versions of Pylint and Yapf to use
         id: req
         run: |
+          # Files/dirs given during manual invocation take precedence.
+          if [[ "${{github.event_name}}" == "workflow_dispatch" ]]; then
+            if [[ -n "${{inputs.files}}" ]]; then
+              files="${{inputs.files}}"
+            else
+              echo "::error title=Error::No file names or directories provided"
+              exit 1
+            fi
+          else
+            files="${{steps.changes.outputs.all_changed_files}}"
+          fi
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+          # Get the pylint & yapf versions from requirements.txt.
+          # In case of multiple values in the file, the last one will win.
           echo "pylint_version=" >> "$GITHUB_OUTPUT"
           echo "yapf_version=" >> "$GITHUB_OUTPUT"
-          # Look for the entries in requirements.txt.
-          # In case of multiple values in the file, the last one will win.
           number_regex='[0-9]+(\.[0-9]+)?(\.[0-9]+)?'
           while IFS= read -r line; do
             if [[ $line =~ ^pylint.* ]]; then
@@ -157,22 +182,12 @@ jobs:
           path: ${{needs.setup.outputs.cache_paths}}
           fail-on-cache-miss: true
 
-      - name: Get the list of Python files changed in the triggering event
-        id: changes
-        uses: tj-actions/changed-files@v45
-        # Although this workflow is triggered only if Python files are changed,
-        # they might not be the *only* files changed; hence, we have to filter
-        # the set of files down to just the Python files.
-        with:
-          files: |
-            **.py
-
-      - name: Set up lint output problem matcher
+      - name: Set up pylint output problem matcher
         run: echo "::add-matcher::.github/problem-matchers/pylint.json"
 
       - name: Lint the changed Python files
         run: |
-          pylint "${{steps.changes.outputs.all_changed_files}}"
+          pylint ${{needs.setup.outputs.files}}
 
   format:
     name: Check the format of Python files
@@ -194,19 +209,11 @@ jobs:
           path: ${{needs.setup.outputs.cache_paths}}
           fail-on-cache-miss: true
 
-      - name: Get the list of Python files changed in the triggering event
-        id: changes
-        uses: tj-actions/changed-files@v45
-        with:
-          files: |
-            **.py
-
       - name: Run Yapf on the Python changed files
-        id: yapf
         run: |
           set +e
           yapf --parallel --diff --style=google \
-            "${{steps.changes.outputs.all_changed_files}}" > diff.out 2>&1
+            "${{needs.setup.outputs.files}}" > diff.out 2>&1
           exit_code=$?
           if [[ -s ./diff.out ]]; then
             # Write any output both here and to the job summary.
