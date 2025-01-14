@@ -221,9 +221,15 @@ jobs:
           exit_code=$?
           if [[ -s ./diff.out ]]; then
             # Write any output both here and to the job summary.
-            sudo apt-get install bat
+            url="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+            TERM=xterm-color
+            gr="$(tput setaf 42)"
+            wh="$(tput setaf 230)"
+            rs="$(tput sgr0)"
+            hi="👋🏻"
+            echo "$hi ${gr}Visit $wh$url$gr for formatted diff output$rs $hi"
             echo "::group::Yapf output"
-            cat diff.out | batcat --paging never
+            cat diff.out
             echo "::endgroup::"
             {
             echo "## Yapf output"
