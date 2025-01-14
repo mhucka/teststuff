@@ -202,6 +202,7 @@ jobs:
       - name: Run Yapf on the Python changed files
         id: yapf
         run: |
+          set +e
           yapf --parallel --diff --style=google \
             "${{steps.changes.outputs.all_changed_files}}" > diff.out 2>&1
           exit_code=$?
