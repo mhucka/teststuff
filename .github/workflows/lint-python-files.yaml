@@ -1,4 +1,9 @@
-# Summary: GitHub CI workflow for checking Python files.
+# Summary: TFQ continuous integration workflow for checking Python files.
+#
+# This workflow runs pylint and yapf. It only examines .py files. It reads the
+# requirements.txt file to find out the versions of pylint and yapf to
+# install, and uses caching to speed up the loading of the Python environment.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 name: Python file checks
 run-name: >
@@ -21,7 +26,7 @@ on:
     paths:
       - '**.py'
 
-  # Manual on-demand invocations.
+  # For manual invocation, with options that might be useful for debugging.
   workflow_dispatch:
     inputs:
       python_ver:
@@ -197,9 +202,9 @@ jobs:
       - name: Run Yapf on the Python changed files
         id: yapf
         run: |
-          yapf -p -d --style=google \
-            "${{steps.changes.outputs.all_changed_files}}" > diff.out
-          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          yapf --parallel --diff --style=google \
+            "${{steps.changes.outputs.all_changed_files}}" > diff.out 2>&1
+          exit_code=$?
           if [[ -s ./diff.out ]]; then
             {
             echo "## Yapf output"
@@ -209,4 +214,4 @@ jobs:
             echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
           fi
-          exit ${{steps.yapf.outputs.exit_code}}
+          exit $exit_code
