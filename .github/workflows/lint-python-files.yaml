@@ -205,6 +205,9 @@ jobs:
           yapf --parallel --diff --style=google \
             "${{steps.changes.outputs.all_changed_files}}" > diff.out 2>&1
           exit_code=$?
+          echo "============"
+          cat diff.out
+          echo "============"
           if [[ -s ./diff.out ]]; then
             {
             echo "## Yapf output"
