@@ -221,8 +221,9 @@ jobs:
           exit_code=$?
           if [[ -s ./diff.out ]]; then
             # Write any output both here and to the job summary.
+            sudo apt-get install bat
             echo "::group::Yapf output"
-            cat diff.out
+            cat diff.out | batcat --paging never
             echo "::endgroup::"
             {
             echo "## Yapf output"
