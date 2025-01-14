@@ -3,6 +3,8 @@
 # This workflow runs pylint and yapf. It only examines .py files. It reads the
 # requirements.txt file to find out the versions of pylint and yapf to
 # install, and uses caching to speed up the loading of the Python environment.
+# It can also be invoked manually using the "Run workflow" button on the page at
+# https://github.com/tensorflow/quantum/actions/workflows/lint-python-files.yaml
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 name: Python file checks
@@ -206,10 +208,11 @@ jobs:
           yapf --parallel --diff --style=google \
             "${{steps.changes.outputs.all_changed_files}}" > diff.out 2>&1
           exit_code=$?
-          echo "============"
-          cat diff.out
-          echo "============"
           if [[ -s ./diff.out ]]; then
+            # Write any output both here and to the job summary.
+            echo "::group::Yapf output"
+            cat diff.out
+            echo "::endgroup::"
             {
             echo "## Yapf output"
             echo ""
