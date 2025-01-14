@@ -57,7 +57,7 @@ jobs:
     outputs:
       cache_key: ${{steps.parameters.outputs.cache_key}}
       cache_paths: ${{steps.parameters.outputs.cache_paths}}
-      files: ${{steps.parameters.outputs.files_to_check}}
+      files: ${{steps.files.outputs.files_to_check}}
     steps:
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
@@ -111,22 +111,26 @@ jobs:
           files: |
             **.py
 
-      - if: steps.check_cache.outputs.cache-hit != 'true'
-        name: Determine the versions of Pylint and Yapf to use
-        id: req
+      - name: Determine the files to be checked
+        id: files
         run: |
           # Files/dirs given during manual invocation take precedence.
           if [[ "${{github.event_name}}" == "workflow_dispatch" ]]; then
             if [[ -n "${{inputs.files}}" ]]; then
               files="${{inputs.files}}"
             else
-              echo "::error title=Error::No file names or directories provided"
+              echo "::error title=Error::No file names or directories provided."
               exit 1
             fi
           else
             files="${{steps.changes.outputs.all_changed_files}}"
           fi
-          echo "files=$files" >> "$GITHUB_OUTPUT"
+          echo "files_to_check=$files" >> "$GITHUB_OUTPUT"
+
+      - if: steps.check_cache.outputs.cache-hit != 'true'
+        name: Determine the versions of Pylint and Yapf to use
+        id: req
+        run: |
           # Get the pylint & yapf versions from requirements.txt.
           # In case of multiple values in the file, the last one will win.
           echo "pylint_version=" >> "$GITHUB_OUTPUT"
