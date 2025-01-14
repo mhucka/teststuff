@@ -220,14 +220,14 @@ jobs:
             "${{needs.setup.outputs.files}}" > diff.out 2>&1
           exit_code=$?
           if [[ -s ./diff.out ]]; then
-            # Write any output both here and to the job summary.
-            url="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+            # Write output both here and to the job summary.
             TERM=xterm-color
-            gr="$(tput setaf 42)"
-            wh="$(tput setaf 230)"
-            rs="$(tput sgr0)"
+            bo=$'\e[1m'
+            bl=$'\e[38;5;117m'
+            rs=$'\e[0m'
             hi="👋🏻"
-            echo "$hi ${gr}Visit $wh$url$gr for formatted diff output$rs $hi"
+            u="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+            echo "$hi ${bl}Visit $bo$u${rs}$bl for formatted diff output$rs $hi"
             echo "::group::Yapf output"
             cat diff.out
             echo "::endgroup::"
