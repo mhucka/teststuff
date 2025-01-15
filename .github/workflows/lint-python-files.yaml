@@ -17,6 +17,8 @@ env:
   python_ver: '3.10'
 
 on:
+  merge_group:
+    - checks_requested
   pull_request:
     types: [opened, synchronize]
     paths:
