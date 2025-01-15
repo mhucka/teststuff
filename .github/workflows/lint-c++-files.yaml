@@ -58,39 +58,37 @@ jobs:
           oldest=$(jq 'sort_by(.timestamp) | first | .id' <<< "$commits")
           echo oldest_commit="$oldest" >> "$GITHUB_OUTPUT"
           echo num_commits=$(jq length <<< "$commits") >> "$GITHUB_OUTPUT"
-          echo $oldest_commit
-          echo $num_commits
 
-      # - name: Check out a copy of the TFQ git repository
-      #   uses: actions/checkout@v4
-      #   with:
-      #     fetch-depth: ${{steps.count.outputs.num_commits}}
+      - name: Check out a copy of the TFQ git repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{steps.count.outputs.num_commits}}
 
-      # - name: Run clang-format on C++ and Protobuf files
-      #   run: |
-      #     version="${{inputs.clang_format_ver || env.clang_format_ver}}"
-      #     sha=${{steps.commits.outputs.first_commit}}
-      #     git clang-format-$version --style google --diff $sha > diff.out 2>&1
-      #     exit_code=$?
-      #     if (( $exit_code == 1 )) && [[ -s ./diff.out ]]; then
-      #       # Write output both here and to the job summary.
-      #       TERM=xterm-color
-      #       bo=$'\e[1m'
-      #       bl=$'\e[38;5;117m'
-      #       rs=$'\e[0m'
-      #       hi="👋🏻"
-      #       u="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
-      #       echo "$hi ${bl}Visit $bo$u${rs}$bl for formatted diff output$rs $hi"
-      #       echo "::group::clang-format output"
-      #       cat diff.out
-      #       echo "::endgroup::"
-      #       # shellcheck disable=SC2006
-      #       {
-      #       echo "## Output from `clang-format`"
-      #       echo ""
-      #       echo '```diff'
-      #       echo "$(< diff.out)"
-      #       echo '```'
-      #       } >> "$GITHUB_STEP_SUMMARY"
-      #     fi
-      #     exit $exit_code
+      - name: Run clang-format on C++ and Protobuf files
+        run: |
+          version="${{inputs.clang_format_ver || env.clang_format_ver}}"
+          sha=${{steps.commits.outputs.first_commit}}
+          git clang-format-$version --style google --diff $sha > diff.out 2>&1
+          exit_code=$?
+          if (( $exit_code == 1 )) && [[ -s ./diff.out ]]; then
+            # Write output both here and to the job summary.
+            TERM=xterm-color
+            bo=$'\e[1m'
+            bl=$'\e[38;5;117m'
+            rs=$'\e[0m'
+            hi="👋🏻"
+            u="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+            echo "$hi ${bl}Visit $bo$u${rs}$bl for formatted diff output$rs $hi"
+            echo "::group::clang-format output"
+            cat diff.out
+            echo "::endgroup::"
+            # shellcheck disable=SC2006
+            {
+            echo "## Output from `clang-format`"
+            echo ""
+            echo '```diff'
+            echo "$(< diff.out)"
+            echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit $exit_code
