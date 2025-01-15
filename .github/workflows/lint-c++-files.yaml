@@ -13,7 +13,7 @@ run-name: >
 env:
   # Version of clang-format to use. Can be overridden with workflow_dispatch.
   # Note: as of 2025-01-14, version 15 is the latest available
-x  clang_format_ver: '18'
+  clang_format_ver: '18'
 
 on:
   pull_request:
