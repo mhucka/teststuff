@@ -61,7 +61,6 @@ jobs:
       - name: Install clang-format
         run: |
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
-          #sudo apt-get install -y "clang-format-$version"
           clang-format --version
           git-clang-format --version
 
