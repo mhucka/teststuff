@@ -67,4 +67,3 @@ jobs:
       - name: Run clang-format on C++ and Protobuf files
         run: |
           git-clang-format --version
-
