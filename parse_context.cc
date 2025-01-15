@@ -411,7 +411,8 @@ Status GetIndividualSample(tensorflow::OpKernelContext* context,
 }
 
 // used by adj_grad_op.
-tensorflow::Status GetPrevGrads( tensorflow::OpKernelContext* context, std::vector<std::vector<float>>* parsed_prev_grads) {
+tensorflow::Status GetPrevGrads( tensorflow::OpKernelContext* context, 
+std::vector<std::vector<float>>* parsed_prev_grads) {
   const Tensor* input_grads;
   Status status = context->input("downstream_grads", &input_grads);
   if (!status.ok()) {
