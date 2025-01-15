@@ -50,7 +50,7 @@ jobs:
     name: Check the format of C++ and Protobuf files
     runs-on: ubuntu-24.04
     steps:
-      - name: Count how many git commits we need to fetch
+      - name: Count how many git commits need to be fetched
         id: count
         env:
           commits: ${{ toJson(github.event.commits) }}
@@ -62,38 +62,31 @@ jobs:
         with:
           fetch-depth: ${{steps.count.outputs.num_commits}}
 
-        # run: |
-        #   echo "${{toJson(github.event.push)}}"
-        #   echo "==="
-        #   echo "${{ toJson(github) }}"
-        #   #echo "${{toJson(github.event.pull_request.commits)}}"
-
-
-      # - name: Run clang-format on C++ and Protobuf files
-      #   run: |
-      #     version="${{inputs.clang_format_ver || env.clang_format_ver}}"
-      #     git clang-format-$version --style google --diff \
-      #       ${{github.event.before}} > diff.out 2>&1
-      #     exit_code=$?
-      #     if [[ -s ./diff.out ]]; then
-      #       # Write output both here and to the job summary.
-      #       TERM=xterm-color
-      #       bo=$'\e[1m'
-      #       bl=$'\e[38;5;117m'
-      #       rs=$'\e[0m'
-      #       hi="👋🏻"
-      #       u="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
-      #       echo "$hi ${bl}Visit $bo$u${rs}$bl for formatted diff output$rs $hi"
-      #       echo "::group::clang-format output"
-      #       cat diff.out
-      #       echo "::endgroup::"
-      #       # shellcheck disable=SC2006
-      #       {
-      #       echo "## Output from `clang-format`"
-      #       echo ""
-      #       echo '```diff'
-      #       echo "$(< diff.out)"
-      #       echo '```'
-      #       } >> "$GITHUB_STEP_SUMMARY"
-      #     fi
-      #     exit $exit_code
+      - name: Run clang-format on C++ and Protobuf files
+        run: |
+          version="${{inputs.clang_format_ver || env.clang_format_ver}}"
+          git clang-format-$version --style google --diff \
+            ${{github.event.before}} > diff.out 2>&1
+          exit_code=$?
+          if [[ -s ./diff.out ]]; then
+            # Write output both here and to the job summary.
+            TERM=xterm-color
+            bo=$'\e[1m'
+            bl=$'\e[38;5;117m'
+            rs=$'\e[0m'
+            hi="👋🏻"
+            u="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
+            echo "$hi ${bl}Visit $bo$u${rs}$bl for formatted diff output$rs $hi"
+            echo "::group::clang-format output"
+            cat diff.out
+            echo "::endgroup::"
+            # shellcheck disable=SC2006
+            {
+            echo "## Output from `clang-format`"
+            echo ""
+            echo '```diff'
+            echo "$(< diff.out)"
+            echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit $exit_code
