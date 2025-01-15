@@ -1,0 +1,85 @@
+# Summary: TFQ continuous integration workflow for checking C++ files.
+#
+# This workflow runs clang-formmat. It only examines C++ and protobuf files.
+# It can be invoked manually using the "Run workflow" button on the page at
+# https://github.com/tensorflow/quantum/actions/workflows/lint-c++-files.yaml
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+name: C++ & protobuf file checks
+run-name: >
+  C++ & protobuf lint & format checks for ${{github.event_name}}
+  by ${{github.triggering_actor}}
+
+env:
+  # Version of clang-format to use. Can be overridden with workflow_dispatch.
+  clang_format_ver: '19'
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '**.cc'
+      - '**.h'
+      - '**.proto'
+
+  push:
+    branches:
+      - main
+    paths:
+      - '**.cc'
+      - '**.h'
+      - '**.proto'
+
+  # For manual invocation, with options that might be useful for debugging.
+  workflow_dispatch:
+    inputs:
+      files:
+        description: "Files and/or directories to check:"
+        type: string
+      clang_format_ver:
+        description: 'clang-format version:'
+        type: string
+
+# Cancel previously-started but still active workflow runs on the same branch.
+concurrency:
+  group: ${{github.workflow}}-${{github.event.pull_request.number||github.ref}}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  format:
+    name: Check the format of C++ and Protobuf files
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out a copy of the TFQ git repository
+        uses: actions/checkout@v4
+
+      # - name: Install clang-format
+      #   run: |
+      #     version="${{inputs.clang_format_ver || env.clang_format_ver}}"
+      #     sudo apt-get install -y "clang-format-$version"
+
+      # - name: Run clang-format
+      #   uses: jidicula/clang-format-action@v4.14.0
+      #   with:
+      #     clang-format-version: ${{inputs.clang_format_ver || env.clang_format_ver}}
+      #     fallback-style: Google
+      #     check-path: ${{matrix.path}}
+
+      - name: Run clang-format
+        uses: cpp-linter/cpp-linter-action@v2
+        with:
+          style: 'google'
+          # Turn on debugging when running manually.
+          verbosity: >
+            ${{github.event_name == 'workflow_dispatch' && 'debug' || 'info'}}
+          version: ${{inputs.clang_format_ver || env.clang_format_ver}}
+          no-lgtm: true
+          step-summary: true
+          # Automatically run as many threads as possible.
+          jobs: 0
+          # Don't run clang-tidy.
+          tidy-checks: '-*'
