@@ -24,8 +24,6 @@ on:
       - '**.proto'
 
   push:
-    branches:
-      - main
     paths:
       - '**.cc'
       - '**.h'
@@ -59,7 +57,7 @@ jobs:
         run: |
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
           git clang-format-$version --style google --diff \
-            ${{github.event.before}} 2>&1 diff.out
+            ${{github.event.before}} > diff.out 2>&1
           exit_code=$?
           if [[ -s ./diff.out ]]; then
             # Write output both here and to the job summary.
