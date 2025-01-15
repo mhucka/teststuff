@@ -67,8 +67,7 @@ Status ParsePrograms(OpKernelContext* context, const std::string& input_name,
   if (!status.ok()) {
     return status;  }
 
-  if (input->dims() != 1) 
- {
+  if (input->dims() != 1)  {
  
 
    // Never parse anything other than a 1d list of circuits.
