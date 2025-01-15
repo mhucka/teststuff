@@ -68,7 +68,7 @@ jobs:
           git clang-format-$version --style google --diff \
             ${{github.event.before}} > diff.out 2>&1
           exit_code=$?
-          if [[ -s ./diff.out ]]; then
+          if (( $exit_code == 1 )) && [[ -s ./diff.out ]]; then
             # Write output both here and to the job summary.
             TERM=xterm-color
             bo=$'\e[1m'
