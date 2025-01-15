@@ -70,7 +70,8 @@ jobs:
           set -x
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
           sha=${{steps.count.outputs.first_commit}}
-          git clang-format-$version --style google --diff $sha > diff.out 2>&1
+          git clang-format-$version --style google --diff \
+            --commit $sha > diff.out 2>&1
           exit_code=$?
           if (( exit_code == 1 )) && [[ -s ./diff.out ]]; then
             # Write output both here and to the job summary.
