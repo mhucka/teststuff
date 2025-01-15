@@ -58,7 +58,9 @@ jobs:
           printf "%s" "$commits" > ./commits.txt
           first=$(jq 'sort_by(.timestamp) | first | .id' < ./commits.txt)
           echo first_commit="$first" >> "$GITHUB_OUTPUT"
-          echo num_commits="$(jq length < ./commits.txt)" >> "$GITHUB_OUTPUT"
+          num_commits="$(jq length < ./commits.txt)"
+          (( num_commits++ ))
+          echo num_commits=="$num_commits" >> "$GITHUB_OUTPUT"
 
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
