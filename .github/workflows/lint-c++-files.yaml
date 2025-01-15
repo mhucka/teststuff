@@ -58,6 +58,35 @@ jobs:
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
 
+      - if: github.event_name != 'workflow_dispatch'
+        name: Get the list of C++ & Protobuf files changed in the triggering event
+        id: changes
+        uses: tj-actions/changed-files@v45
+        # Although this workflow is triggered only if C++ & Protobuf files are
+        # changed, they might not be the *only* files changed; hence, we have
+        # to filter the set of files down to just the C++/Protobuf files.
+        with:
+          files: |
+            **.cc
+            **.h
+            **.proto
+
+      - name: Determine the files to be checked
+        id: files
+        run: |
+          # Files/dirs given during manual invocation take precedence.
+          if [[ "${{github.event_name}}" == "workflow_dispatch" ]]; then
+            if [[ -n "${{inputs.files}}" ]]; then
+              files="${{inputs.files}}"
+            else
+              echo "::error title=Error::No file names or directories provided."
+              exit 1
+            fi
+          else
+            files="${{steps.changes.outputs.all_changed_files}}"
+          fi
+          echo "files_to_check='$files'" >> "$GITHUB_OUTPUT"
+
       - name: Run clang-format on C++ and Protobuf files
         run: |
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
