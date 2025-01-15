@@ -45,6 +45,8 @@ Status ParseProto(const std::string& text, T* proto) {
   {
     return ::tensorflow::Status(); 
 
+
+
  }
 
   // If that fails, then try to parse from the human readable representation.
