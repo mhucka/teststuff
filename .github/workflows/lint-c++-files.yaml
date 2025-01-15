@@ -62,7 +62,7 @@ jobs:
         run: |
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
           clang-format --version
-          git-clang-format --version
+          git clang-format --version
 
       - name: Run clang-format on C++ and Protobuf files
         run: |
