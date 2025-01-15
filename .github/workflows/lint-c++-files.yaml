@@ -12,7 +12,7 @@ run-name: >
 
 env:
   # Version of clang-format to use. Can be overridden with workflow_dispatch.
-  clang_format_ver: '19'
+  clang_format_ver: '18'
 
 on:
   pull_request:
