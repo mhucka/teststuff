@@ -52,7 +52,7 @@ jobs:
     steps:
       - name: foo
         run: |
-          echo ${{ github.event.pull_request.commits }}
+          echo "${{toJson(github.event.pull_request.commits)}}"
 
 
       # - name: Check out a copy of the TFQ git repository
