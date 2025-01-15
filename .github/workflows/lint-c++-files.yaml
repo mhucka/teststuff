@@ -72,7 +72,7 @@ jobs:
           set -x
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
           sha="$(git rev-parse ${{steps.count.outputs.first_commit}}^)"
-          git log -m -1 --name-status "$sha"
+          git diff-tree --no-commit-id --name-only -r "$sha"
           git clang-format-$version -v --style google --diff \
             --commit "$sha" > diff.out 2>&1
           exit_code=$?
