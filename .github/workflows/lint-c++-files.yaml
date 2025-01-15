@@ -52,8 +52,8 @@ jobs:
           num_commits="$(jq length < ./commits.json)"
           (( num_commits++ ))
           jq 'sort_by(.timestamp)' < ./commits.json > ./sorted-commits.json
-          first=$(jq 'first | .id' < ./sorted-commits.json)
-          last=$(jq 'last | .id' < ./sorted-commits.json)
+          first=$(jq -r 'first | .id' < ./sorted-commits.json)
+          last=$(jq -r 'last | .id' < ./sorted-commits.json)
           {
           echo num_commits="$num_commits"
           echo first_sha=$first
