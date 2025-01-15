@@ -71,7 +71,7 @@ jobs:
           jq 'sort_by(.timestamp)' < ./commits.json > ./sorted-commits.json
           first=$(jq 'first | .id' < ./sorted-commits.json)
           # Get the commit that came before the set of commits in this event.
-          starting_sha="$(git rev-parse $first^)"
+          starting_sha=$(git rev-parse $first^)
           ending_sha=$(jq 'last | .id' < ./sorted-commits.json)
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
           # Run git-clang-format on the range of commits in this event.
