@@ -51,11 +51,15 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: foo
-        run: |
-          echo "${{toJson(github.event.push)}}"
-          echo "==="
-          echo "${{ toJson(github) }}"
-          #echo "${{toJson(github.event.pull_request.commits)}}"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+        # run: |
+        #   echo "${{toJson(github.event.push)}}"
+        #   echo "==="
+        #   echo "${{ toJson(github) }}"
+        #   #echo "${{toJson(github.event.pull_request.commits)}}"
 
 
       # - name: Check out a copy of the TFQ git repository
