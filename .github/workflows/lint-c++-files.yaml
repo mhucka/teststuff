@@ -15,7 +15,8 @@ env:
 
 on:
   merge_group:
-    - checks_requested
+    types:
+      - checks_requested
   pull_request:
     types: [opened, synchronize]
     paths:
