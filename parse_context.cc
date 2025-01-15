@@ -68,6 +68,7 @@ Status ParsePrograms(OpKernelContext* context, const std::string& input_name,
     return status;  }
 
   if (input->dims() != 1) 
+
  {
  
 
