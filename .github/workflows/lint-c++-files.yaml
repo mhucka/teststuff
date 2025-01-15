@@ -56,8 +56,8 @@ jobs:
           commits: ${{ toJson(github.event.commits) }}
         run: |
           first=$(jq 'sort_by(.timestamp) | first | .id' <<< "$commits")
-          echo first_commit="$first"" >> "$GITHUB_OUTPUT"
-          echo num_commits=$(jq length <<< "$commits") >> "$GITHUB_OUTPUT"
+          echo first_commit="$first" >> "$GITHUB_OUTPUT"
+          echo num_commits="$(jq length <<< "$commits") >> "$GITHUB_OUTPUT"
 
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
@@ -67,10 +67,10 @@ jobs:
       - name: Run clang-format on C++ and Protobuf files
         run: |
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
-          sha=${{steps.commits.outputs.first_commit}}
+          sha=${{steps.count.outputs.first_commit}}
           git clang-format-$version --style google --diff $sha > diff.out 2>&1
           exit_code=$?
-          if (( $exit_code == 1 )) && [[ -s ./diff.out ]]; then
+          if (( exit_code == 1 )) && [[ -s ./diff.out ]]; then
             # Write output both here and to the job summary.
             TERM=xterm-color
             bo=$'\e[1m'
