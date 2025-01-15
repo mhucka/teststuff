@@ -50,12 +50,17 @@ jobs:
     name: Check the format of C++ and Protobuf files
     runs-on: ubuntu-24.04
     steps:
-      - name: foo
+      - name: Count how many git commits we need to fetch
+        id: count
         env:
           commits: ${{ toJson(github.event.commits) }}
         run: |
-          count=$(echo -e "$commits" | jq length)
-          echo $count
+          echo num_commits=$(echo -e "$commits" | jq length) >> "$GITHUB_OUTPUT"
+
+      - name: Check out a copy of the TFQ git repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{steps.count.outputs.num_commits}}
 
         # run: |
         #   echo "${{toJson(github.event.push)}}"
@@ -63,9 +68,6 @@ jobs:
         #   echo "${{ toJson(github) }}"
         #   #echo "${{toJson(github.event.pull_request.commits)}}"
 
-
-      # - name: Check out a copy of the TFQ git repository
-      #   uses: actions/checkout@v4
 
       # - name: Run clang-format on C++ and Protobuf files
       #   run: |
