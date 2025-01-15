@@ -94,7 +94,7 @@ jobs:
             echo "::endgroup::"
             # shellcheck disable=SC2006
             {
-            echo "## Output from `clang-format`"
+            echo "## Output from <code>clang-format</code>"
             echo ""
             echo '```diff'
             echo "$(< diff.out)"
