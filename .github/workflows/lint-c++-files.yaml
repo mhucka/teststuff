@@ -79,7 +79,7 @@ jobs:
           git clang-format-$version -v --style google --diff \
             "$starting_sha" "$ending_sha" > diff.out 2>&1
           exit_code=$?
-          if (( exit_code == 1 )) && [[ -s ./diff.out ]]; then
+          if (( exit_code == 1 )); then
             # Write output both here and to the job summary.
             TERM=xterm-color
             bo=$'\e[1m'
