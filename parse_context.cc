@@ -61,10 +61,10 @@ Status ParsePrograms(OpKernelContext* context, const std::string& input_name,
   const tensorflow::Tensor* input;
   Status status = context->input(input_name, &input);
   if (!status.ok()) {
-    return status;
-  }
+    return status;  }
 
-  if (input->dims() != 1) {
+  if (input->dims() != 1) 
+{
     // Never parse anything other than a 1d list of circuits.
     return Status(
         static_cast<tensorflow::errors::Code>(
