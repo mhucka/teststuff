@@ -55,9 +55,10 @@ jobs:
         env:
           commits: ${{ toJson(github.event.commits) }}
         run: |
-          first=$(jq 'sort_by(.timestamp) | first | .id' <<< "$commits")
+          printf "%s" "$commits" > ./commits.txt
+          first=$(jq 'sort_by(.timestamp) | first | .id' < ./commits.txt)
           echo first_commit="$first" >> "$GITHUB_OUTPUT"
-          echo num_commits="$(jq length <<< "$commits") >> "$GITHUB_OUTPUT"
+          echo num_commits="$(jq length < ./commits.txt)" >> "$GITHUB_OUTPUT"
 
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
