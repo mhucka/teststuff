@@ -70,7 +70,8 @@ jobs:
           first_sha: ${{steps.commits.outputs.first_sha}}
           last_sha: ${{steps.commits.outputs.last_sha}}
         run: |
-          set -x -e
+          set -e
+          set -x
           # Get the commit that came before the set of commits in this event.
           starting_sha=$(git rev-parse $first_sha^)
           ending_sha=$last_sha
