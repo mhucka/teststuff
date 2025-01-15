@@ -55,8 +55,8 @@ jobs:
         env:
           commits: ${{ toJson(github.event.commits) }}
         run: |
-          oldest=$(jq 'sort_by(.timestamp) | first | .id' <<< "$commits")
-          echo oldest_commit="$oldest" >> "$GITHUB_OUTPUT"
+          first=$(jq 'sort_by(.timestamp) | first | .id' <<< "$commits")
+          echo first_commit="$first"" >> "$GITHUB_OUTPUT"
           echo num_commits=$(jq length <<< "$commits") >> "$GITHUB_OUTPUT"
 
       - name: Check out a copy of the TFQ git repository
