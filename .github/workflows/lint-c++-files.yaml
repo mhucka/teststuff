@@ -1,8 +1,5 @@
 # Summary: TFQ continuous integration workflow for checking C++ files.
-#
 # This workflow runs clang-formmat. It only examines C++ and protobuf files.
-# It can be invoked manually using the "Run workflow" button on the page at
-# https://github.com/tensorflow/quantum/actions/workflows/lint-c++-files.yaml
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 name: C++ & protobuf file checks
@@ -12,7 +9,8 @@ run-name: >
 
 env:
   # Version of clang-format to use. Can be overridden with workflow_dispatch.
-  # Note: as of 2025-01-14, v. 18 is the latest available on Ubuntu 24.04.
+  # Note: as of 2025-01-14, v. 18 is the latest available on GitHub, and you
+  # have to use Ubuntu 24 to get it.
   clang_format_ver: '18'
 
 on:
@@ -94,7 +92,7 @@ jobs:
             echo "::endgroup::"
             # shellcheck disable=SC2006
             {
-            echo "## Output from <code>clang-format</code>"
+            echo "## Output from <code>clang-format</code> version $version"
             echo ""
             echo '```diff'
             echo "$(< diff.out)"

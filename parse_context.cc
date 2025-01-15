@@ -438,8 +438,7 @@ std::vector<std::vector<float>>* parsed_prev_grads) {
     sub_parsed_grads.reserve(matrix_grads.dimension(1));
     for (unsigned int j = 0; j < matrix_grads.dimension(1); j++) {
       const float grad_v = matrix_grads(i, j);
-      sub_parsed_grads.push_back(grad_v);
-    }
+      sub_parsed_grads.push_back(grad_v);    }
     parsed_prev_grads->push_back(sub_parsed_grads);
   }
 
