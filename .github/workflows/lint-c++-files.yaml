@@ -12,6 +12,7 @@ run-name: >
 
 env:
   # Version of clang-format to use. Can be overridden with workflow_dispatch.
+  # Note: as of 2025-01-14, version 15 is the latest available
   clang_format_ver: '19'
 
 on:
@@ -52,7 +53,7 @@ permissions:
 jobs:
   format:
     name: Check the format of C++ and Protobuf files
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
