@@ -52,8 +52,10 @@ jobs:
     steps:
       - name: foo
         env:
-          GITHUB_CONTEXT: ${{ toJson(github.event.commits) }}
-        run: echo "$GITHUB_CONTEXT"
+          commits: ${{ toJson(github.event.commits) }}
+        run: |
+          which jq
+          apt search jq
 
         # run: |
         #   echo "${{toJson(github.event.push)}}"
