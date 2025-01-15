@@ -54,8 +54,8 @@ jobs:
         env:
           commits: ${{ toJson(github.event.commits) }}
         run: |
-          which jq
-          apt search jq
+          count=$(echo -e "$commits" | jq length)
+          echo $count
 
         # run: |
         #   echo "${{toJson(github.event.push)}}"
