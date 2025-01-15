@@ -53,6 +53,8 @@ jobs:
       - name: foo
         run: |
           echo "${{toJson(github.event.push)}}"
+          echo "==="
+          echo "${{ toJson(github) }}"
           #echo "${{toJson(github.event.pull_request.commits)}}"
 
 
