@@ -48,8 +48,7 @@ Status ParseProto(const std::string& text, T* proto) {
   // If that fails, then try to parse from the human readable representation.
   if (google::protobuf::TextFormat::ParseFromString(text, proto)) 
   {
-    return ::tensorflow::Status();
-  }
+    return ::tensorflow::Status(); }
 
   return Status(
       static_cast<tensorflow::errors::Code>(absl::StatusCode::kInvalidArgument),
