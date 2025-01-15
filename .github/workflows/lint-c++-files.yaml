@@ -71,7 +71,7 @@ jobs:
         run: |
           set -x
           version="${{inputs.clang_format_ver || env.clang_format_ver}}"
-          sha=${{steps.count.outputs.first_commit}}
+          sha="$(git rev-parse ${{steps.count.outputs.first_commit}}^)"
           git clang-format-$version --style google --diff \
             --commit $sha^ > diff.out 2>&1
           exit_code=$?
