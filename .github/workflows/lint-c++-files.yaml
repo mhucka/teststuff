@@ -21,11 +21,11 @@ on:
       - '**.h'
       - '**.proto'
 
-  push:
-    paths:
-      - '**.cc'
-      - '**.h'
-      - '**.proto'
+  # push:
+  #   paths:
+  #     - '**.cc'
+  #     - '**.h'
+  #     - '**.proto'
 
 # Cancel previously-started but still active workflow runs on the same branch.
 concurrency:

@@ -22,11 +22,11 @@ on:
     paths:
       - '**.py'
 
-  push:
-    branches:
-      - main
-    paths:
-      - '**.py'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - '**.py'
 
   # Allow manual invocation, with options that might be useful for debugging.
   workflow_dispatch:
