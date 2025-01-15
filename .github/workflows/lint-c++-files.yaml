@@ -52,7 +52,7 @@ jobs:
     steps:
       - name: foo
         run: |
-          echo "${{toJson(github.event.push.commits)}}"
+          echo "${{toJson(github.event.push)}}"
           #echo "${{toJson(github.event.pull_request.commits)}}"
 
 
