@@ -28,7 +28,7 @@ on:
     paths:
       - '**.py'
 
-  # For manual invocation, with options that might be useful for debugging.
+  # Allow manual invocation, with options that might be useful for debugging.
   workflow_dispatch:
     inputs:
       files:
@@ -48,6 +48,10 @@ on:
 concurrency:
   group: ${{github.workflow}}-${{github.event.pull_request.number||github.ref}}
   cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   setup:
@@ -152,7 +156,7 @@ jobs:
               fi
             fi
           done < "requirements.txt"
-          # If given a version, use that instead of what's in requirements.txt.
+          # If given versions in manual invocation, use them instead.
           if [[ "${{inputs.pylint_ver}}" != "" ]]; then
             echo "pylint_version=${{inputs.pylint_ver}}" >> "$GITHUB_OUTPUT"
           fi
@@ -231,8 +235,9 @@ jobs:
             echo "::group::Yapf output"
             cat diff.out
             echo "::endgroup::"
+            # shellcheck disable=SC2006
             {
-            echo "## Yapf output"
+            echo "## Output from <code>yapf</code>"
             echo ""
             echo '```diff'
             echo "$(< diff.out)"

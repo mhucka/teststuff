@@ -1,10 +1,10 @@
 # Summary: TFQ continuous integration workflow for checking C++ files.
-# This workflow runs clang-formmat. It only examines C++ and protobuf files.
+# This workflow runs clang-formmat. It only examines C++ and Protobuf files.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-name: C++ & protobuf file checks
+name: C++ & Protobuf file checks
 run-name: >
-  C++ & protobuf lint & format checks for ${{github.event_name}}
+  C++ & Protobuf lint & format checks for ${{github.event_name}}
   by ${{github.triggering_actor}}
 
 env:
@@ -52,6 +52,7 @@ jobs:
           jq 'sort_by(.timestamp)' < ./commits.json > ./sorted-commits.json
           first=$(jq -r 'first | .id' < ./sorted-commits.json)
           last=$(jq -r 'last | .id' < ./sorted-commits.json)
+          # shellcheck disable=SC2086
           {
           echo num_commits="$num_commits"
           echo first_sha=$first
@@ -70,11 +71,12 @@ jobs:
         run: |
           set +e
           set -x
+          # shellcheck disable=SC2086
           # Get the commit that came before the set of commits in this event.
           starting_sha=$(git rev-parse $first_sha^)
           ending_sha=$last_sha
           # Run git-clang-format on the range of commits in this event.
-          version="${{inputs.clang_format_ver || env.clang_format_ver}}"
+          version="${{env.clang_format_ver}}"
           git clang-format-$version -v --style google --diff \
             "$starting_sha" "$ending_sha" > diff.out 2>&1
           exit_code=$?
