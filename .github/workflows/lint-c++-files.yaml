@@ -58,12 +58,7 @@ jobs:
       - name: Check out a copy of the TFQ git repository
         uses: actions/checkout@v4
 
-      - name: Install clang-format
-        run: |
-          version="${{inputs.clang_format_ver || env.clang_format_ver}}"
-          clang-format --version
-          git clang-format-18 --version
-
       - name: Run clang-format on C++ and Protobuf files
         run: |
-          git-clang-format --version
+          version="${{inputs.clang_format_ver || env.clang_format_ver}}"
+          git clang-format-$version --style google --diff ${{github.event.before}}"
