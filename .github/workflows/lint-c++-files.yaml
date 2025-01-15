@@ -68,6 +68,7 @@ jobs:
       - name: Run clang-format on C++ and Protobuf files
         run: |
           set -x -e
+          ls -l
           jq 'sort_by(.timestamp)' < ./commits.json > ./sorted-commits.json
           first=$(jq 'first | .id' < ./sorted-commits.json)
           # Get the commit that came before the set of commits in this event.
