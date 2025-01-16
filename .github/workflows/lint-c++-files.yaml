@@ -53,7 +53,9 @@ jobs:
         run: |
           set -x
           printf "%s" "$event"
-          echo "$GITHUB_REF" 
+          echo "$GITHUB_REF"
+          echo "${{ github.event.pull_request.base.ref }}"
+          echo "$GITHUB_EVENT_PATH"
 
         # run: |
         #   printf "%s" "$commits" > ./commits.json

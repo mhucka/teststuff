@@ -2,4 +2,3 @@ def function():
     print(
         "foo")
 
-
