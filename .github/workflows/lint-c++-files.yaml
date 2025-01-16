@@ -71,7 +71,6 @@ jobs:
         #   echo last_sha=$last
         #   } >> "$GITHUB_OUTPUT"
 
-
       # - name: Check out a copy of the TFQ git repository
       #   uses: actions/checkout@v4
       #   with:
