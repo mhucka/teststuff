@@ -29,8 +29,7 @@ limitations under the License.
 #include "tensorflow_quantum/core/proto/program.pb.h"
 #include "tensorflow_quantum/core/src/program_resolution.h"
 
-namespace tfq
- {
+namespace tfq {
 namespace 
 {
 
