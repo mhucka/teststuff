@@ -50,7 +50,9 @@ jobs:
           GH_TOKEN: ${{github.token}}
         run: |
           set -x
-          echo ${{github.event.number}}
+          echo ${{github.ref_name}}
+          echo ${{ github.head_ref || github.ref_name }} 
+
           url="${{github.event.pull_request.commits_url}}"
           # Create an array of commit SHAs sorted by timestamp.
           # shellcheck disable=SC2207
