@@ -47,41 +47,31 @@ jobs:
       - name: Count how many git commits need to be fetched
         id: commits
         env:
-          event: ${{toJson(github.event)}}
-          commits: ${{toJson(github.event.commits)}}
-          ref: ${{github.event.pull_request.base_ref}}
-          env:
-            GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{github.token}}
         run: |
           set -x
-          # echo "::group::group"
-          # cat "$GITHUB_EVENT_PATH"
-          # echo "::endgroup::"
-          # jq '.[] | .commit.sha' "$GITHUB_EVENT_PATH"
-          #  jq '.[] | .sha' f.json
-          shas=$(gh api ${{ github.event.pull_request.commits_url }} --jq '.[] | .sha')
+          echo ${{github.ref_name}}
+          echo ${{ github.head_ref || github.ref_name }} 
 
-          # "https://api.github.com/repos/mhucka/teststuff/pulls/6/commits"
-
-
-        # run: |
-        #   printf "%s" "$commits" > ./commits.json
-        #   num_commits="$(jq length < ./commits.json)"
-        #   (( num_commits++ ))
-        #   jq 'sort_by(.timestamp)' < ./commits.json > ./sorted-commits.json
-        #   first=$(jq -r 'first | .id' < ./sorted-commits.json)
-        #   last=$(jq -r 'last | .id' < ./sorted-commits.json)
-        #   # shellcheck disable=SC2086
-        #   {
-        #   echo num_commits="$num_commits"
-        #   echo first_sha=$first
-        #   echo last_sha=$last
-        #   } >> "$GITHUB_OUTPUT"
+          url="${{github.event.pull_request.commits_url}}"
+          # Create an array of commit SHAs sorted by timestamp.
+          # shellcheck disable=SC2207
+          shas=( $(gh api $url --jq 'sort_by(.timestamp) | .[] | .sha') )
+          first=${shas[0]}
+          last=${shas[-1]}
+          # We need to reach back one more commit when we fetch the git repo.
+          fetch_commits=$(( ${#shas[@]} + 1 ))
+          # shellcheck disable=SC2086
+          {
+          echo fetch_commits=$fetch_commits
+          echo first_sha=$first
+          echo last_sha=$last
+          } >> "$GITHUB_OUTPUT"
 
       # - name: Check out a copy of the TFQ git repository
       #   uses: actions/checkout@v4
       #   with:
-      #     fetch-depth: ${{steps.commits.outputs.num_commits}}
+      #     fetch-depth: ${{steps.commits.outputs.fetch_commits}}
 
       # - name: Run clang-format on C++ and Protobuf files
       #   env:
