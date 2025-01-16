@@ -47,36 +47,22 @@ jobs:
       - name: Count how many git commits need to be fetched
         id: commits
         env:
-          event: ${{toJson(github.event)}}
-          commits: ${{toJson(github.event.commits)}}
-          ref: ${{github.event.pull_request.base_ref}}
           GH_TOKEN: ${{github.token}}
         run: |
           set -x
           url="${{github.event.pull_request.commits_url}}"
-          shas=$(gh api $url --jq 'sort_by(.timestamp) | .[] | .sha')
+          # Create an array of commit SHAs, sorted by timestamp.
+          shas=( $(gh api $url --jq 'sort_by(.timestamp) | .[] | .sha') )
           first=${shas[0]}
           last=${shas[-1]}
-          echo '==========='
-          echo ${shas[@]}
-          echo $first
-          echo $last
-
-
-
-        # run: |
-        #   printf "%s" "$commits" > ./commits.json
-        #   num_commits="$(jq length < ./commits.json)"
-        #   (( num_commits++ ))
-        #   jq 'sort_by(.timestamp)' < ./commits.json > ./sorted-commits.json
-        #   first=$(jq -r 'first | .id' < ./sorted-commits.json)
-        #   last=$(jq -r 'last | .id' < ./sorted-commits.json)
-        #   # shellcheck disable=SC2086
-        #   {
-        #   echo num_commits="$num_commits"
-        #   echo first_sha=$first
-        #   echo last_sha=$last
-        #   } >> "$GITHUB_OUTPUT"
+          # We need to reach back one more commit when we fetch the git repo.
+          fetch_commits=$(( ${#shas[@]} + 1 ))
+          # shellcheck disable=SC2086
+          {
+          echo fetch_commits=$fetch_commits
+          echo first_sha=$first
+          echo last_sha=$last
+          } >> "$GITHUB_OUTPUT"
 
       # - name: Check out a copy of the TFQ git repository
       #   uses: actions/checkout@v4
