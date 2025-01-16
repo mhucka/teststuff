@@ -52,7 +52,7 @@ jobs:
           ref: ${{github.event.pull_request.base_ref}}
         run: |
           set -x
-          jq '.[] | .commit.sha' "$GITHUB_REF"
+          jq '.[] | .commit.sha' "$GITHUB_EVENT_PATH"
 
 
         # run: |
