@@ -229,12 +229,12 @@ jobs:
             hi="👋🏻"
             u="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
             echo "$hi ${bl}Visit $bo$u${rs}$bl for formatted diff output$rs $hi"
-            echo "::group::Output from <code>yapf</code> version $yapf_version"
+            echo "::group::yapf output"
             cat diff.out
             echo "::endgroup::"
             # shellcheck disable=SC2006
             {
-            echo "## Output from <code>yapf</code>"
+            echo "## Output from <code>yapf</code> version $yapf_version"
             echo ""
             echo '```diff'
             echo "$(< diff.out)"
