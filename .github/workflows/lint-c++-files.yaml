@@ -52,10 +52,14 @@ jobs:
           ref: ${{github.event.pull_request.base_ref}}
         run: |
           set -x
-          echo "::group::group"
-          cat "$GITHUB_EVENT_PATH"
-          echo "::endgroup::"
-          jq '.[] | .commit.sha' "$GITHUB_EVENT_PATH"
+          # echo "::group::group"
+          # cat "$GITHUB_EVENT_PATH"
+          # echo "::endgroup::"
+          # jq '.[] | .commit.sha' "$GITHUB_EVENT_PATH"
+          #  jq '.[] | .sha' f.json
+          shas=$(gh api ${{ github.event.pull_request.commits_url }} --jq '.[] | .sha')
+
+          # "https://api.github.com/repos/mhucka/teststuff/pulls/6/commits"
 
 
         # run: |
