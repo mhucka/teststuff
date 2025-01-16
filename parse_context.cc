@@ -30,7 +30,6 @@ limitations under the License.
 #include "tensorflow_quantum/core/src/program_resolution.h"
 
 namespace tfq
-
  {
 namespace 
 {
