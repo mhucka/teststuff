@@ -2,7 +2,7 @@
 # This workflow runs clang-formmat. It only examines C++ and Protobuf files.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-name: C++ & Protobuf file checks
+name: "CI: Check C++ & Protobuf files"
 run-name: >
   C++ & Protobuf lint/format checks for ${{github.event_name}}
 
@@ -34,7 +34,7 @@ permissions:
 
 jobs:
   format:
-    name: Check the format of C++ and Protobuf files
+    name: Coding style
     runs-on: ubuntu-24.04
     steps:
       - name: Count how many git commits need to be fetched

@@ -7,7 +7,7 @@
 # https://github.com/tensorflow/quantum/actions/workflows/lint-python-files.yaml
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-name: Python file checks
+name: "CI: Check Python files"
 run-name: >
   Python lint/format checks for ${{github.event_name}}
 
@@ -21,6 +21,11 @@ on:
       - checks_requested
   pull_request:
     types: [opened, synchronize]
+    paths:
+      - '**.py'
+  push:
+    branches:
+      - master
     paths:
       - '**.py'
 
@@ -51,7 +56,6 @@ permissions:
 
 jobs:
   setup:
-    name: Set up Python environment
     runs-on: ubuntu-22.04
     timeout-minutes: 5
     outputs:
@@ -166,8 +170,8 @@ jobs:
           python -m pip install pylint==${{steps.req.outputs.pylint_version}}
           python -m pip install yapf==${{steps.req.outputs.yapf_version}}
 
-  lint:
-    name: Lint Python files
+  pylint:
+    name: Lint
     needs: setup
     runs-on: ubuntu-22.04
     steps:
@@ -194,7 +198,7 @@ jobs:
           pylint ${{needs.setup.outputs.files}}
 
   format:
-    name: Check the format of Python files
+    name: Coding style
     needs: setup
     runs-on: ubuntu-22.04
     steps:
