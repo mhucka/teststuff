@@ -4,3 +4,5 @@ def function():
     print(
         "foo")
 
+
+
