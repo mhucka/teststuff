@@ -44,10 +44,7 @@ Status ParseProto(const std::string& text, T* proto) {
   // First attempt to parse from the binary representation.
 
   if (proto->ParseFromString(text))
-
-
-
-
+    
 
   {
     return ::tensorflow::Status(); 
