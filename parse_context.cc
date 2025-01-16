@@ -32,6 +32,7 @@ limitations under the License.
 namespace tfq
   {
 namespace 
+
 {
 
 using ::tensorflow::OpKernelContext;
