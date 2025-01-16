@@ -221,6 +221,7 @@ jobs:
           exit_code=$?
           if [[ -s ./diff.out ]]; then
             # Write output both here and to the job summary.
+            yapf_version=${{steps.req.outputs.yapf_version}}
             TERM=xterm-color
             bo=$'\e[1m'
             bl=$'\e[38;5;117m'
@@ -228,7 +229,7 @@ jobs:
             hi="👋🏻"
             u="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
             echo "$hi ${bl}Visit $bo$u${rs}$bl for formatted diff output$rs $hi"
-            echo "::group::Yapf output"
+            echo "::group::Output from <code>yapf</code> version $yapf_version"
             cat diff.out
             echo "::endgroup::"
             # shellcheck disable=SC2006
