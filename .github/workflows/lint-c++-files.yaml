@@ -49,8 +49,11 @@ jobs:
         env:
           event: ${{toJson(github.event)}}
           commits: ${{toJson(github.event.commits)}}
+          ref: ${{github.event.pull_request.base_ref}}
         run: |
+          set -x
           printf "%s" "$event"
+          echo "$GITHUB_REF" 
 
         # run: |
         #   printf "%s" "$commits" > ./commits.json
