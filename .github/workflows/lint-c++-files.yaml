@@ -34,7 +34,7 @@ permissions:
 
 jobs:
   format:
-    name: Coding style
+    name: C++ coding style
     runs-on: ubuntu-24.04
     steps:
       - name: Count how many git commits need to be fetched

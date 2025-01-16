@@ -171,7 +171,7 @@ jobs:
           python -m pip install yapf==${{steps.req.outputs.yapf_version}}
 
   pylint:
-    name: Lint
+    name: Python lint
     needs: setup
     runs-on: ubuntu-22.04
     steps:
@@ -198,7 +198,7 @@ jobs:
           pylint ${{needs.setup.outputs.files}}
 
   format:
-    name: Coding style
+    name: Python coding style
     needs: setup
     runs-on: ubuntu-22.04
     steps:
