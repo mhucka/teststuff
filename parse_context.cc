@@ -45,8 +45,6 @@ Status ParseProto(const std::string& text, T* proto) {
 
   if (proto->ParseFromString(text))
 
-
-
   {
     return ::tensorflow::Status(); 
 
