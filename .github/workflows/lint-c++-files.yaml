@@ -50,10 +50,19 @@ jobs:
           event: ${{toJson(github.event)}}
           commits: ${{toJson(github.event.commits)}}
           ref: ${{github.event.pull_request.base_ref}}
+          env:
+            GH_TOKEN: ${{ github.token }}
         run: |
           set -x
-          printf "%s" "$event"
-          echo "$GITHUB_REF" 
+          # echo "::group::group"
+          # cat "$GITHUB_EVENT_PATH"
+          # echo "::endgroup::"
+          # jq '.[] | .commit.sha' "$GITHUB_EVENT_PATH"
+          #  jq '.[] | .sha' f.json
+          shas=$(gh api ${{ github.event.pull_request.commits_url }} --jq '.[] | .sha')
+
+          # "https://api.github.com/repos/mhucka/teststuff/pulls/6/commits"
+
 
         # run: |
         #   printf "%s" "$commits" > ./commits.json
