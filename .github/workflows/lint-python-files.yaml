@@ -217,7 +217,7 @@ jobs:
         run: |
           set +e
           yapf --parallel --diff --style=google \
-            "${{needs.setup.outputs.files}}" > diff.out 2>&1
+            ${{needs.setup.outputs.files}} > diff.out 2>&1
           exit_code=$?
           if [[ -s ./diff.out ]]; then
             # Write output both here and to the job summary.
