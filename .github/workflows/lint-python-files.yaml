@@ -9,8 +9,7 @@
 
 name: Python file checks
 run-name: >
-  Python lint & format checks for ${{github.event_name}}
-  by ${{github.triggering_actor}}
+  Python lint/format checks for ${{github.event_name}}
 
 env:
   # Python version to use. Can be overridden when workflow dispatch is used.
@@ -25,13 +24,7 @@ on:
     paths:
       - '**.py'
 
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - '**.py'
-
-  # Allow manual invocation, with options that might be useful for debugging.
+  # Allow manual invocation, with options that can be useful for debugging.
   workflow_dispatch:
     inputs:
       files:
