@@ -221,7 +221,7 @@ jobs:
           exit_code=$?
           if [[ -s ./diff.out ]]; then
             # Write output both here and to the job summary.
-            yapf_version=${{steps.req.outputs.yapf_version}}
+            yapf_version=$(yapf --version | cut -d' ' -f2)
             TERM=xterm-color
             bo=$'\e[1m'
             bl=$'\e[38;5;117m'
