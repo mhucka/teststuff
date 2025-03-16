@@ -56,7 +56,7 @@ jobs:
         run: |
           set -x
           pip install cffconvert
-          cffconvert --validate > /dev/null 2>&1
+          cffconvert --validate
           (( $? == 0 )) && validated=true || validated=false
           if [[ $validated && "$(yq .version)" == "${{env.version}}" ]]; then
             echo "valid=true" >> "$GITHUB_OUTPUT"
