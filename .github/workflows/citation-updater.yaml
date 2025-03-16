@@ -22,8 +22,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - if: github.event.release.tag_name != ''
-        name: Check that the release tag is not empty
+      - if: ${{!github.event.release.tag_name}}
+        name: Verify that the release tag is not empty
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
