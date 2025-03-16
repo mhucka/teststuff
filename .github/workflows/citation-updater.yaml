@@ -1,0 +1,78 @@
+# Zero-config modular workflow for updating CITATION.cff upon new releases.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+name: CITATION.cff updater
+run-name: Update CITATION.cff for new release
+
+on:
+  release:
+    types: [published]
+
+  # Allow manual invocation.
+  workflow_dispatch:
+
+# Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+  update-citation-cff:
+    name: Update CITATION.cff file
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Check out a copy of the git repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Verify this repo has a CITATION.cff file (and stop here if not)
+        id: check
+        run: |
+          [[ -f CITATION.cff ]] && have_cff=true || have_cff=false
+          echo "has_cff_file=$have_cff" >> "$GITHUB_OUTPUT"
+
+      - if: steps.check.outputs.has_cff_file == 'true'
+        name: Get the release version and date
+        id: release_info
+        run: |
+          set -x
+          version="${{github.event.release.tag_name}}"
+          version="${version#v}"
+          published_date="${{github.event.release.published_at}}"
+          date=$(date -u -d "$published_date" +"%Y-%m-%d")
+          echo "version=$version" >> "$GITHUB_ENV"
+          echo "date=$date" >> "$GITHUB_ENV"
+
+      - if: steps.check.outputs.has_cff_file == 'true'
+        name: Update CITATION.cff
+        run: |
+          set -x
+          sed -i "s/^version:.*$/version: '${{env.version}}'/" CITATION.cff
+          sed -i "s/^date-released:.*$/date-released: ${{env.date}}/" CITATION.cff
+
+      - if: steps.check.outputs.has_cff_file == 'true'
+        name: Verify that CITATION.cff was written correctly
+        id: verify-cff
+        run: |
+          set -x
+          pip install cffconvert
+          if [[ $(cffconvert --validate > /dev/null 2>&1)
+                && $(yq .version) == ${{env.version}} ]]; then
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "valid=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.verify-cff.outputs.valid == 'false'
+        name: Report error if validation failed
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+        with:
+          script: |
+            core.setFailed('Failed to update CITATION.cff')
+
+      - if: success() && steps.check.outputs.has_cff_file == 'true'
+        name: Commit the updated CITATION.cff back to the repo
+        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
+        with:
+          add: CITATION.cff
+          message: 'Update version and date in CITATION.cff file'
