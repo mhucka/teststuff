@@ -58,6 +58,7 @@ jobs:
           pip install cffconvert
           cffconvert --version
           cffconvert --validate
+          cat CITATION.cff
           (( $? == 0 )) && validated=true || validated=false
           if [[ $validated && "$(yq .version)" == "${{env.version}}" ]]; then
             echo "valid=true" >> "$GITHUB_OUTPUT"
