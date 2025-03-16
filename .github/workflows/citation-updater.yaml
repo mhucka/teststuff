@@ -88,6 +88,7 @@ jobs:
           pip install cffconvert
           valid=true
           cffconvert --validate > /dev/null 2>&1 || valid=false
+          new_version=$(yq -r .version CITATION.cff)
           [[ "$new_version" == "${{env.written_version}}" ]] || valid=false
           echo "valid=$valid" >> "$GITHUB_OUTPUT"
 
