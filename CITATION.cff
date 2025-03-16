@@ -14,7 +14,7 @@ title: test
 authors:
   - family-names: test
     given-names: test
-version: 0.0.1
+version: '0.0.1'
 date-released: 2025-03-10
 url: https://github.com/mhucka/teststuff
 repository-code: https://github.com/mhucka/teststuff
