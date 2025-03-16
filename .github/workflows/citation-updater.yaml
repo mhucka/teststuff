@@ -89,7 +89,8 @@ jobs:
           cffconvert --version
           valid=false
           cffconvert --validate > /dev/null 2>&1 && valid=true
-          [[ "$(yq .version)" == "${{env.written_version}}" ]] && valid=true
+          new_version=$(yq -r .version)
+          [[ "$new_version" == "${{env.written_version}}" ]] && valid=true
           echo "valid=$valid" >> "$GITHUB_OUTPUT"
 
       - if: steps.verify-cff.outputs.valid == 'false'
