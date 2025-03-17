@@ -63,6 +63,7 @@ jobs:
             core.setFailed('Could not find a CITATION.cff file')
 
       - name: Update the CITATION.cff file
+        id: update
         run: |
           echo "::group::CITATION.cff file before update"
           cat CITATION.cff
@@ -74,32 +75,27 @@ jobs:
           date=$(date -u -d "${{env.pub_date}}" +"%Y-%m-%d")
           sed -i "s/^version:.*$/version: '$version'/" CITATION.cff
           sed -i "s/^date-released:.*$/date-released: $date/" CITATION.cff
-          echo "written_version=$version" >> "$GITHUB_ENV"
-          set +x
+
+          # Sanity-check that the result looks valid.
+          success=true
+          yamllint CITATION.cff > /dev/null 2>&1 || success=false
+          written_version=$(yq -r .version CITATION.cff)
+          [[ "$version" == "$written_version" ]] || success=false
+          echo "success=$success" >> "$GITHUB_OUTPUT"
 
           echo "::group::CITATION.cff file after update"
           cat CITATION.cff
           echo "::endgroup::"
 
-      - name: Verify that CITATION.cff was written correctly
-        id: verify-cff
-        run: |
-          set -x
-          pip install cffconvert
-          valid=true
-          cffconvert --validate > /dev/null 2>&1 || valid=false
-          new_version=$(yq -r .version CITATION.cff)
-          [[ "$new_version" == "${{env.written_version}}" ]] || valid=false
-          echo "valid=$valid" >> "$GITHUB_OUTPUT"
-
-      - if: steps.verify-cff.outputs.valid == 'false'
+      - if: steps.update.outputs.success == 'false'
         name: Quit if CITATION.cff update failed
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
-            core.setFailed('Failed to update CITATION.cff')
+            core.setFailed('CITATION.cff update failed or the file is not valid')
 
-      - name: Commit the updated CITATION.cff back to the repo
+      - if: steps.update.outputs.success == 'true'
+        name: Commit the updated CITATION.cff back to the repo
         uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
         with:
           add: CITATION.cff
