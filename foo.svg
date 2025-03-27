@@ -73,11 +73,9 @@
   </defs>
   <sodipodi:namedview id="namedview4" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25"/>
   <style>
-    path {
-    fill: yellow;
-    }
+    path { fill: rgb(95, 99, 104); }
     @media (prefers-color-scheme: dark) {
-    path { fill: pink; }
+    path { fill: white; }
     }
   </style>
   <g id="g12" clip-path="url(#clipPath16)" transform="matrix(1.333333, 0, 0, -1.333333, 0, 96)">
