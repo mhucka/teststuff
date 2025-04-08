@@ -10,24 +10,6 @@ cff-version: 1.2.0
 message: >-
   Please cite your use of Qualtran using the reference metadata provided here.
 
-# If preferred-citation is present, GitHub uses its value for the "cite this
-# repository" button and ignores the rest of this file; conversely, the Zenodo-
-# GitHub integration ignores this field when archiving a new software release
-# and uses the metadata in the rest of this file.
-preferred-citation:
-  type: misc
-  authors: *authors
-  title: Expressing and Analyzing Quantum Algorithms with Qualtran
-  year: 2024
-  doi: 10.48550/arXiv.2409.04643
-  url: https://arxiv.org/abs/2409.04643
-  identifiers:
-    - description: arXiv identifier for the submission
-      value: 'arXiv:2409.04643'
-      type: other
-  keywords:
-    - quant-ph
-
 # The remaining metadata in this file describes the current software release.
 
 title: Qualtran
@@ -125,3 +107,21 @@ keywords:
   - stabilizer circuits
   - translator
   - visualization
+
+# If preferred-citation is present, GitHub uses its value for the "cite this
+# repository" button and ignores the rest of this file; conversely, the Zenodo-
+# GitHub integration ignores this field when archiving a new software release
+# and uses the metadata in the rest of this file.
+preferred-citation:
+  type: misc
+  authors: *authors
+  title: Expressing and Analyzing Quantum Algorithms with Qualtran
+  year: 2024
+  doi: 10.48550/arXiv.2409.04643
+  url: https://arxiv.org/abs/2409.04643
+  identifiers:
+    - description: arXiv identifier for the submission
+      value: 'arXiv:2409.04643'
+      type: other
+  keywords:
+    - quant-ph
