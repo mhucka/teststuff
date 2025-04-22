@@ -63,6 +63,8 @@ jobs:
       - name: Label the PR with a size label
         id: label
         continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{github.token}}
         run: ./dev_tools/ci/size-labeler.sh |& tee action.out
 
       - name: Detect and report errors in labeler action
