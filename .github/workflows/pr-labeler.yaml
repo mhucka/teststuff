@@ -71,6 +71,7 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{inputs.token || github.token}}
+          SHELLOPTS: ${{inputs.trace && 'xtrace' || '' }}
         run: ./dev_tools/ci/size-labeler.sh |& tee action.out
 
       - name: Detect and report errors in labeler action
