@@ -24,4 +24,4 @@ jobs:
       # is a workflow_dispatch invocation and the user set the 'trace' option.
       SHELLOPTS: 'xtrace'
     steps:
-      - echo yes
+      - run: echo yes
