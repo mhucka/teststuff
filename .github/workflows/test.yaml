@@ -5,14 +5,23 @@ on:
   pull_request:
   push:
   workflow_dispatch:
+    inputs:
+      trace:
+        description: 'Turn on shell script debugging'
+        type: boolean
 
 defaults:
   run:
     shell: bash -x {0}
 
 jobs:
-  setup:
-    runs-on: ubuntu-22.04
+  test:
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
+    if: github.repository == 'quantumlib/Cirq'
+    env:
+      # The next var is used by Bash. We add 'xtrace' to the options if this run
+      # is a workflow_dispatch invocation and the user set the 'trace' option.
+      SHELLOPTS: 'xtrace'
     steps:
-      - run: ls
+      - echo yes
