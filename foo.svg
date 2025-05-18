@@ -1,9 +1,9 @@
 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5100 2000">
   <defs>
     <style>
-      .letter { fill: white; }
-      @media (prefers-color-scheme: light) {
-        .letter { fill: #6a6a6a; }
+      .letter { fill: #6a6a6a; }
+      @media (prefers-color-scheme: dark) {
+        .letter { fill: Canvas; }
       }
       .yellow { fill:#fbc02d; }
       .orange { fill:#ff8209; }
