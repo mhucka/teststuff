@@ -3,7 +3,7 @@
     <style>
       .letter { fill: #6a6a6a; }
       @media (prefers-color-scheme: dark) {
-        .letter { fill: Canvas; }
+        .letter { fill: CanvasText; }
       }
       .yellow { fill:#fbc02d; }
       .orange { fill:#ff8209; }
