@@ -3,7 +3,7 @@
     <style>
       .cls-1 {fill: rgb(95, 99, 104);}
       @media (prefers-color-scheme: dark) {
-        .cls-1 {fill: currentColor;}
+        .cls-1 {fill: white; mix-blend-mode: difference; }
       }
       .cls-2 {fill:#fbc02d;}
       .cls-3 {fill:#ff8209;}
