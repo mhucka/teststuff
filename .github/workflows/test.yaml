@@ -28,9 +28,8 @@ jobs:
 
   test:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
     env:
       SHELLOPTS: 'xtrace'
-      foo: macos-15
+      foo: macos
     steps:
       - run: echo ${{fromJSON(env.foo)}}
