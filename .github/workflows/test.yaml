@@ -34,4 +34,4 @@ jobs:
       SHELLOPTS: 'xtrace'
       foo: 'macos-15'
     steps:
-      - run: echo ${{fromJson(env.foo).split('-')[1]}}
+      - run: echo ${{fromJSON(env.foo).split('-')[1]}}
