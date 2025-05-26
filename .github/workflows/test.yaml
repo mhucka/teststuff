@@ -15,13 +15,23 @@ defaults:
     shell: bash -x {0}
 
 jobs:
+  # test:
+  #   runs-on: ubuntu-24.04
+  #   timeout-minutes: 5
+  #   if: github.repository == 'mhucka/teststuff'
+  #   env:
+  #     # The next var is used by Bash. We add 'xtrace' to the options if this run
+  #     # is a workflow_dispatch invocation and the user set the 'trace' option.
+  #     SHELLOPTS: 'xtrace'
+  #   steps:
+  #     - run: echo yes
+
   test:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     if: github.repository == 'mhucka/teststuff'
     env:
-      # The next var is used by Bash. We add 'xtrace' to the options if this run
-      # is a workflow_dispatch invocation and the user set the 'trace' option.
       SHELLOPTS: 'xtrace'
+      foo: 'macos-15'
     steps:
-      - run: echo yes
+      - run: echo ${{fromJson(env.foo).split('-')[1]}}
