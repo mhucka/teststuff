@@ -30,6 +30,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       SHELLOPTS: 'xtrace'
-      foo: 'macos'
+      foo: 15
     steps:
-      - run: echo ${{fromJSON(env.foo)}}
+      - run: echo ${{format('macos-{0}', env.foo}}
+        
