@@ -30,6 +30,6 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       SHELLOPTS: 'xtrace'
-      foo: macos
+      foo: 'macos'
     steps:
       - run: echo ${{fromJSON(env.foo)}}
