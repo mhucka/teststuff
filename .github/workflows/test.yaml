@@ -32,5 +32,4 @@ jobs:
       SHELLOPTS: 'xtrace'
       foo: 15
     steps:
-      - run: echo ${{format('macos-{0}', env.foo}}
-        
+      - run: echo ${{format('macos-{0}', ${{env.foo}} }}
