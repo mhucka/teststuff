@@ -34,6 +34,7 @@ jobs:
       - run: |
           [[ $(sysctl hw.optional.avx512f) -eq 1 ]] && echo yes || echo no
           [[ $(sysctl hw.optional.avx2_0) -eq 1 ]] && echo yes || echo no
+      - run: clang++ --version
 
 
   # test:
