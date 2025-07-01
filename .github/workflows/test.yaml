@@ -48,6 +48,11 @@ jobs:
       - run: msinfo32
         continue-on-error: true
 
+      - run: reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Windows" /v FeatureSet
+
+      - run: reg query "Hardware\Description\System\CentralProcessor\0" /v FeatureSet
+
+
   # test:
   #   runs-on: ubuntu-24.04
   #   strategy:
