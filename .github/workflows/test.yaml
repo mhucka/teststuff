@@ -45,8 +45,8 @@ jobs:
       - run: systeminfo
         continue-on-error: true
 
-      - run: msinfo32
-        continue-on-error: true
+      # - run: msinfo32
+      #   continue-on-error: true
 
       - run: reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Windows" /v FeatureSet
 
