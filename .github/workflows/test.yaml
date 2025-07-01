@@ -49,12 +49,15 @@ jobs:
       #   continue-on-error: true
 
       - run: reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Windows" /v FeatureSet
+        shell: cmd
         continue-on-error: true
 
       - run: reg query "Hardware\Description\System\CentralProcessor\0" /v FeatureSet
+        shell: cmd
         continue-on-error: true
 
       - run: reg query "HKLM\Hardware\Description\System\CentralProcessor\0" /v FeatureSet
+        shell: cmd
         continue-on-error: true
 
 
