@@ -30,6 +30,11 @@ jobs:
     runs-on: macos-13
     steps:
       - run: sysctl hw.optional
+      - run: sysctl machdep
+      - run: |
+          [[ $(sysctl hw.optional.avx512f) -eq 1 ]] && echo yes || echo no
+          [[ $(sysctl hw.optional.avx2_0) -eq 1 ]] && echo yes || echo no
+
 
   # test:
   #   runs-on: ubuntu-24.04
