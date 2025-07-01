@@ -26,24 +26,50 @@ jobs:
   #   steps:
   #     - run: echo yes
 
-  test:
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        conf: [
-          {os: macos-14, wh: macosx, arch: x86_64, py: 10, pyarch: x64},
-          {os: ubuntu-24.04, wh: manylinux, arch: x86_64, py: 10, pyarch: x64},
- #         {os: windows-2019, wh: win, arch: AMD64,  py: 10, pyarch: x64},
-        ]
-    env:
-      CIBW_ARCHS: ${{matrix.conf.arch}}
-      CIBW_BUILD: cp3${{matrix.conf.py}}-${{matrix.conf.wh}}_${{matrix.conf.arch}}
-#      CIBW_ENVIRONMENT: 'MACOSX_DEPLOYMENT_TARGET=${{matrix.conf.dep}}'
+  print-info:
+    runs-on: macos-13
     steps:
-      - if: startsWith(matrix.conf.os, 'macos')
-        run: |
-          os=${{matrix.conf.os}}
-          echo MACOSX_DEPLOYMENT_TARGET=${os: -2} >> "$GITHUB_ENV"
+      - run: sysctl hw.optional
 
-      - run: echo "$MACOSX_DEPLOYMENT_TARGET"
+  # test:
+  #   runs-on: ubuntu-24.04
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       conf: [
+  #         {os: ubuntu-24.04, wh: manylinux, arch: x86_64, py: 10, pyarch: x64},
+  #         {os: ubuntu-24.04, wh: manylinux, arch: x86_64, py: 11, pyarch: x64},
+  #         {os: ubuntu-24.04, wh: manylinux, arch: x86_64, py: 12, pyarch: x64},
+  #         {os: ubuntu-24.04, wh: manylinux, arch: x86_64, py: 13, pyarch: x64},
+
+  #         {os: macos-13, wh: macosx, arch: x86_64, py: 10, pyarch: x64},
+  #         {os: macos-13, wh: macosx, arch: x86_64, py: 11, pyarch: x64},
+  #         {os: macos-13, wh: macosx, arch: x86_64, py: 12, pyarch: x64},
+  #         {os: macos-13, wh: macosx, arch: x86_64, py: 13, pyarch: x64},
+
+  #         # 3.10 fails due to https://github.com/actions/setup-python/issues/948
+  #         # {os: macos-14, wh: macosx, arch: x86_64, py: 10, pyarch: x64},
+  #         {os: macos-14, wh: macosx, arch: x86_64, py: 11, pyarch: x64},
+  #         {os: macos-14, wh: macosx, arch: x86_64, py: 12, pyarch: x64},
+  #         {os: macos-14, wh: macosx, arch: x86_64, py: 13, pyarch: x64},
+
+  #         {os: macos-15, wh: macosx, arch: arm64, py: 10, pyarch: arm64},
+  #         {os: macos-15, wh: macosx, arch: arm64, py: 11, pyarch: arm64},
+  #         {os: macos-15, wh: macosx, arch: arm64, py: 12, pyarch: arm64},
+  #         {os: macos-15, wh: macosx, arch: arm64, py: 13, pyarch: arm64},
+
+  #         {os: windows-2019, wh: win, arch: AMD64, py: 10, pyarch: x64},
+  #         {os: windows-2019, wh: win, arch: AMD64, py: 11, pyarch: x64},
+  #         {os: windows-2019, wh: win, arch: AMD64, py: 12, pyarch: x64},
+  #         {os: windows-2019, wh: win, arch: AMD64, py: 13, pyarch: x64},
+  #       ]
+  #   env:
+  #     CIBW_ARCHS: ${{matrix.conf.arch}}
+  #     CIBW_BUILD: cp3${{matrix.conf.py}}-${{matrix.conf.wh}}_${{matrix.conf.arch}}
+  #   steps:
+  #     - if: startsWith(matrix.conf.os, 'macos')
+  #       run: |
+  #         os=${{matrix.conf.os}}
+  #         echo MACOSX_DEPLOYMENT_TARGET=${os: -2} >> "$GITHUB_ENV"
+
+  #     - run: echo "$MACOSX_DEPLOYMENT_TARGET"
