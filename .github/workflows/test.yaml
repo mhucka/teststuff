@@ -40,7 +40,13 @@ jobs:
     runs-on: windows-2022
     steps:
       - run: wmic cpu get
+        continue-on-error: true
 
+      - run: systeminfo
+        continue-on-error: true
+
+      - run: msinfo32
+        continue-on-error: true
 
   # test:
   #   runs-on: ubuntu-24.04
