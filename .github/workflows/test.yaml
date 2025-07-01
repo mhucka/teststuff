@@ -26,7 +26,7 @@ jobs:
   #   steps:
   #     - run: echo yes
 
-  print-info:
+  print-mac:
     runs-on: macos-13
     steps:
       - run: sysctl hw.optional
@@ -35,6 +35,11 @@ jobs:
           [[ $(sysctl hw.optional.avx512f) -eq 1 ]] && echo yes || echo no
           [[ $(sysctl hw.optional.avx2_0) -eq 1 ]] && echo yes || echo no
       - run: clang++ --version
+
+  print-win:
+    runs-on: windows-2022
+    steps:
+      - run: wmic cpu get Name, Caption, InstructionSet
 
 
   # test:
