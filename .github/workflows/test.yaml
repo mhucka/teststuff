@@ -54,6 +54,9 @@ jobs:
       - run: reg query "Hardware\Description\System\CentralProcessor\0" /v FeatureSet
         continue-on-error: true
 
+      - run: reg query "HKLM\Hardware\Description\System\CentralProcessor\0" /v FeatureSet
+        continue-on-error: true
+
 
   # test:
   #   runs-on: ubuntu-24.04
