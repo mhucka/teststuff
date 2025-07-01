@@ -39,7 +39,9 @@ jobs:
   print-win:
     runs-on: windows-2022
     steps:
-      - run: wmic cpu get Name, Caption, InstructionSet
+      - run: wmic cpu get InstructionSet
+      - run: wmic cpu get Name
+      - run: wmic cpu get Caption
 
 
   # test:
