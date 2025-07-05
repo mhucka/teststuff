@@ -71,8 +71,7 @@ jobs:
           mkdir build
           cd build
           cmake --debug-output ..
-
-
+          cmake --build .
 
 
   # test:
