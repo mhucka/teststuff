@@ -12,8 +12,10 @@ int main() {
 
     if (avx512f_supported) {
         // Print a specific string to be captured by CMake
-        std::cout << "AVX512F_SUPPORTED" << std::endl;
+        std::cout << "AVX512F SUPPORTED" << std::endl;
         return 0; // Success
+    } else {
+        std::cout << "AVX512F NOT SUPPORTED" << std::endl;
     }
 
     return 1; // Failure
