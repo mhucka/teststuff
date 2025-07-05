@@ -14,6 +14,8 @@ execute_process(
 #    ERROR_QUIET
 )
 
+execute_process(COMMAND echo "Result is ${check_result}")
+
 if(check_result EQUAL 0)
     message(STATUS "✅ Feature 'AVX-512F' found!")
     # Add your compile definitions for AVX-512F
