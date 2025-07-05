@@ -5,7 +5,7 @@ if(NOT CMAKE_BUILD_TYPE)
     message(STATUS "Build type not specified. Defaulting to Release")
 endif()
 
-file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/check_avx2.cc" "
+file(WRITE "check_avx2.cc" "
 #include <intrin.h>
 int main() {
     int cpuInfo[4];
