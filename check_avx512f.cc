@@ -18,5 +18,5 @@ int main() {
         std::cout << "AVX512F NOT SUPPORTED" << std::endl;
     }
 
-    return 1; // Failure
+    return 11; // Failure
 }
