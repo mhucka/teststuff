@@ -4,7 +4,8 @@ project(check CXX)
 # Add an executable for the CPU feature check
 add_executable(cpu_check check_avx512f.cc)
 
-set(CMAKE_CXX_FLAGS "/EHsc /arch:AVX2 /O2")
+set(CMAKE_CXX_FLAGS_INIT "/EHsc /arch:AVX2 /O2")
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "/EHsc /arch:AVX2 /O2")
 
 # log all *_INIT variables
 message(STATUS "CMake variable values:")
