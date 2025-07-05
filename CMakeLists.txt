@@ -5,21 +5,23 @@ project(check CXX)
 add_executable(cpu_check check_avx512f.cc)
 
 # Values get set, but doesn't seem to get passed to msvc compiler
-# set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} /arch:AVX2 /O2")
-# set(CMAKE_CXX_FLAGS_DEBUG_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} /EHsc /arch:AVX2 /O2")
+set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} /arch:AVX2 /O2")
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} /EHsc /arch:AVX2 /O2")
 
+# This also doesn't seem to get passed to the actual compiler invocation
 add_compile_options(/arch:AVX2 /O2)
 
-# log all *_INIT variables
-message(STATUS "CMake variable values:")
-get_cmake_property(_varNames VARIABLES)
-list(REMOVE_DUPLICATES _varNames)
-list(SORT _varNames)
-foreach(_varName ${_varNames})
-    if(_varName MATCHES "_INIT$")
-        message(STATUS "  ${_varName}=${${_varName}}")
-    endif()
-endforeach()
+
+# # Print the values of cmake variables.
+# message(STATUS "CMake variable values:")
+# get_cmake_property(_varNames VARIABLES)
+# list(REMOVE_DUPLICATES _varNames)
+# list(SORT _varNames)
+# foreach(_varName ${_varNames})
+#     if(_varName MATCHES "_INIT$")
+#         message(STATUS "  ${_varName}=${${_varName}}")
+#     endif()
+# endforeach()
 
 add_custom_command(
     TARGET cpu_check POST_BUILD
