@@ -32,13 +32,7 @@ execute_process(
     RESULT_VARIABLE check_result
 )
 
-message(STATUS "Result is ${check_result}")
-
-
-
-
-
-# execute_process(COMMAND echo "Result is ${check_result}")
+execute_process(COMMAND echo "Result is ${check_result}")
 
 # if(check_result EQUAL 0)
 #     message(STATUS "✅ Feature 'AVX-512F' found!")
