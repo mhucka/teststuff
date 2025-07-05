@@ -74,9 +74,7 @@ jobs:
           mkdir build
           cd build
           cmake --debug-output ..
-          cmake --build .
-          cat cpu_check.vcxproj
-          cat commands.json
+          cmake --build -v .
 
 
   # test:

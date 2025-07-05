@@ -10,8 +10,6 @@ add_executable(cpu_check check_avx512f.cc)
 
 add_compile_options(/arch:AVX2 /O2)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 # log all *_INIT variables
 message(STATUS "CMake variable values:")
 get_cmake_property(_varNames VARIABLES)
