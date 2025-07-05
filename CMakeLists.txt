@@ -1,45 +1,36 @@
-cmake_minimum_required(VERSION 3.31)
-project(check CXX)
+cmake_minimum_required(VERSION 3.21)
+project(HardwareCheck CXX)
 
-if(NOT CMAKE_BUILD_TYPE)
-    message(STATUS "Build type not specified. Defaulting to Release")
-endif()
-
-file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/check_avx2.cc" "
-#include <intrin.h>
+set(CHECK_AVX2_SRC "${CMAKE_CURRENT_BINARY_DIR}/check_avx2.cc")
+file(WRITE ${CHECK_AVX2_SRC} "
+#include <intrin.h> // For MSVC
 int main() {
     int cpuInfo[4];
+#if defined(__GNUC__) || defined(__clang__)
+    __asm__ __volatile__ (
+        \"cpuid;\"
+        : \"=a\" (cpuInfo[0]), \"=b\" (cpuInfo[1]), \"=c\" (cpuInfo[2]), \"=d\" (cpuInfo[3])
+        : \"a\" (7), \"c\" (0)
+    );
+#else
     __cpuidex(cpuInfo, 7, 0);
+#endif
+    // Return 0 if supported (success), 1 if not (failure)
     return (cpuInfo[1] & (1 << 5)) ? 0 : 1;
 }"
 )
 
-add_executable(check_2 "${CMAKE_CURRENT_SOURCE_DIR}/check_avx2.cc")
-
-target_compile_options(check_2 PRIVATE /arch:AVX2)
-
-add_custom_command(
-    TARGET check_2 POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E echo "Running the test program..."
-    COMMAND $<TARGET_FILE:check_2>
-    COMMAND ${CMAKE_COMMAND} -E echo "Test program finished."
-    COMMENT "Executing test program"
+try_run(
+    AVX2_RUN_RESULT
+    AVX2_COMPILE_RESULT
+    "${CMAKE_CURRENT_BINARY_DIR}"
+    "${CHECK_AVX2_SRC}"
 )
 
-# Run the compiled checker and check its return code
-execute_process(
-    COMMAND $<TARGET_FILE:check_2>
-    RESULT_VARIABLE check_result
-)
-
-execute_process(COMMAND echo "Result is ${check_result}")
-
-# if(check_result EQUAL 0)
-#     message(STATUS "✅ Feature 'AVX-512F' found!")
-#     # Add your compile definitions for AVX-512F
-#     add_compile_definitions(HAS_AVX512F)
-# elseif(check_result EQUAL 11)
-#     message(STATUS "❌ Feature 'AVX-512F' not found.")
-# else()
-#     message(STATUS "wrong")
-# endif()
+if(AVX2_COMPILE_RESULT AND AVX2_RUN_RESULT EQUAL 0)
+    message(STATUS "✅ AVX2 support detected. Enabling optimizations.")
+    set(AVX2_SUPPORTED TRUE)
+else()
+    message(STATUS "❌ AVX2 support not detected.")
+    set(AVX2_SUPPORTED FALSE)
+endif()
