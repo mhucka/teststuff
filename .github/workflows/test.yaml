@@ -44,6 +44,8 @@ jobs:
     steps:
       - name: Check out a copy of the git repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
 
       # - run: wmic cpu get
       #   continue-on-error: true
@@ -66,11 +68,15 @@ jobs:
       #   shell: cmd
       #   continue-on-error: true
 
-      - run: |
+      - continue-on-error: true
+        run: |
+          set -x
           mkdir build
           cd build
           cmake --debug-output ..
           cmake --build .
+          cat cpu_check.vcxproj
+          cat commands.json
 
 
   # test:

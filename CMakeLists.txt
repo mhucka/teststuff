@@ -4,8 +4,10 @@ project(check CXX)
 # Add an executable for the CPU feature check
 add_executable(cpu_check check_avx512f.cc)
 
-set(CMAKE_CXX_FLAGS_INIT "/EHsc /arch:AVX2 /O2")
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "/EHsc /arch:AVX2 /O2")
+set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} /EHsc /arch:AVX2 /O2")
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} /EHsc /arch:AVX2 /O2")
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # log all *_INIT variables
 message(STATUS "CMake variable values:")
@@ -25,6 +27,9 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E echo "Test program finished."
     COMMENT "Executing test program"
 )
+
+get_target_property(compile_defs cpu_check COMPILE_DEFINITIONS)
+message(STATUS "cpu_check compile definitions: ${compile_defs})
 
 
 # # Run the compiled checker and check its return code
