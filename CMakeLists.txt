@@ -8,8 +8,8 @@ add_executable(cpu_check check_avx512f.cc)
 execute_process(
     COMMAND $<TARGET_FILE:cpu_check>
     RESULT_VARIABLE check_result
-    OUTPUT_QUIET
-    ERROR_QUIET
+#    OUTPUT_QUIET
+#    ERROR_QUIET
 )
 
 if(check_result EQUAL 0)
