@@ -38,6 +38,9 @@ jobs:
 
   print-win:
     runs-on: windows-2022
+    env:
+      # Default shell is bash, so this should work.
+      SHELLOPTS: 'xtrace'
     steps:
       - run: wmic cpu get
         continue-on-error: true
@@ -59,6 +62,13 @@ jobs:
       - run: reg query "HKLM\Hardware\Description\System\CentralProcessor\0" /v FeatureSet
         shell: cmd
         continue-on-error: true
+
+      - run: |
+          mkdir build
+          cd build
+          cmake ..
+
+
 
 
   # test:
