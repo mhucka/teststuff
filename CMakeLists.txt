@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.31)
 project(check CXX)
 
-set(CMAKE_CXX_FLAGS "/arch:AVX512 /O2")
+target_compile_options(cpu_check PRIVATE 
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /EHsc /arch:AVX512 /O2)
 
 # Add an executable for the CPU feature check
 add_executable(cpu_check check_avx512f.cc)
