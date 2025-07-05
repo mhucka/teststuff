@@ -4,6 +4,8 @@ project(check)
 # Add an executable for the CPU feature check
 add_executable(cpu_check check_avx512f.cc)
 
+execute_process(COMMAND echo "Hello from execute_process")
+
 # Run the compiled checker and check its return code
 execute_process(
     COMMAND $<TARGET_FILE:cpu_check>
