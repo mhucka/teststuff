@@ -64,10 +64,8 @@ jobs:
         continue-on-error: true
 
       - run: |
-          pwd
-          ls
-          mkdir .github/workflows/build
-          cd .github/workflows/build
+          mkdir build
+          cd build
           cmake ..
 
 
