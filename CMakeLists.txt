@@ -5,7 +5,7 @@ if(NOT CMAKE_BUILD_TYPE)
     message(STATUS "Build type not specified. Defaulting to Release")
 endif()
 
-file(WRITE "check_avx2.cc" "
+file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/check_avx2.cc" "
 #include <intrin.h>
 int main() {
     int cpuInfo[4];
@@ -14,7 +14,7 @@ int main() {
 }"
 )
 
-add_executable(check_2 check_avx2.cc)
+add_executable(check_2 "${CMAKE_CURRENT_SOURCE_DIR}/check_avx2.cc")
 
 target_compile_options(check_2 PRIVATE /arch:AVX2)
 
