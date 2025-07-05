@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.31)
+project(check CXX)
 
 # Add an executable for the CPU feature check
 add_executable(cpu_check check_avx512f.cc)
 
-set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} /arch:AVX2 /O2")
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} /EHsc /arch:AVX2 /O2")
+# Values get set, but doesn't seem to get passed to msvc compiler
+# set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} /arch:AVX2 /O2")
+# set(CMAKE_CXX_FLAGS_DEBUG_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} /EHsc /arch:AVX2 /O2")
 
-project(check CXX)
+add_compile_options(/arch:AVX2 /O2)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
