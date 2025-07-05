@@ -5,7 +5,7 @@ project(check CXX)
 add_executable(cpu_check check_avx512f.cc)
 
 target_compile_options(cpu_check PRIVATE 
-  $<$<CXX_COMPILER_ID:MSVC>:/W4 /EHsc /arch:AVX512 /O2)
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /EHsc /arch:AVX512)
 
 add_custom_command(
     TARGET cpu_check POST_BUILD
