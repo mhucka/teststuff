@@ -5,11 +5,13 @@ project(check CXX)
 add_executable(cpu_check check_avx512f.cc)
 
 # Values get set, but doesn't seem to get passed to msvc compiler
-set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} /arch:AVX2 /O2")
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} /EHsc /arch:AVX2 /O2")
+# set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} /arch:AVX512 /O2")
+# set(CMAKE_CXX_FLAGS_DEBUG_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} /EHsc /arch:AVX512 /O2")
 
 # This also doesn't seem to get passed to the actual compiler invocation
-add_compile_options(/arch:AVX2 /O2)
+# add_compile_options(/arch:AVX512 /O2)
+
+target_compile_options(cpu_check PRIVATE /arch:AVX512)
 
 
 # # Print the values of cmake variables.
