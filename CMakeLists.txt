@@ -1,11 +1,20 @@
 cmake_minimum_required(VERSION 3.31)
 project(check CXX)
 
+# log all *_INIT variables
+get_cmake_property(_varNames VARIABLES)
+list(REMOVE_DUPLICATES _varNames)
+list(SORT _varNames)
+foreach(_varName ${_varNames})
+    if(_varName MATCHES "_INIT$")
+        message(STATUS "${_varName}=${${_varName}}")
+    endif()
+endforeach()
+
 # Add an executable for the CPU feature check
 add_executable(cpu_check check_avx512f.cc)
 
-target_compile_options(cpu_check PRIVATE 
-  $<$<CXX_COMPILER_ID:MSVC>:/W4 /EHsc /arch:AVX512)
+target_compile_options(cpu_check PRIVATE /arch:AVX512)
 
 add_custom_command(
     TARGET cpu_check POST_BUILD
