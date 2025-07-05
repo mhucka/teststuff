@@ -29,7 +29,7 @@ add_custom_command(
 )
 
 get_target_property(compile_defs cpu_check COMPILE_DEFINITIONS)
-message(STATUS "cpu_check compile definitions: ${compile_defs})
+message(STATUS "cpu_check compile definitions: ${compile_defs}")
 
 
 # # Run the compiled checker and check its return code
