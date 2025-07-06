@@ -43,6 +43,7 @@ include(CheckCXXCompilerFlag)
 include(CheckCXXSourceRuns)
 
 list(APPEND CMAKE_MESSAGE_CONTEXT "qsim")
+set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
 macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
     set(${_FEATURE_FLAG} FALSE)
