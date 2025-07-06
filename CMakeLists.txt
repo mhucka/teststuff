@@ -42,10 +42,12 @@ project(HardwareCheck CXX)
 include(CheckCXXCompilerFlag)
 include(CheckCXXSourceRuns)
 
+list(APPEND CMAKE_MESSAGE_CONTEXT "qsim")
+
 macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
     set(${_FEATURE_FLAG} FALSE)
 
-    message(STATUS "testing platform support for ${_FEATURE_STRING} …")
+    message(STATUS "Testing platform support for ${_FEATURE_STRING} …")
     if(WIN32)
         # On Windows, there's no built-in method to learn the CPU flags. Third-
         # party tools exist, but downloading & running them is a security risk.
