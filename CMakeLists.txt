@@ -45,10 +45,9 @@ include(CheckCXXSourceRuns)
 list(APPEND CMAKE_MESSAGE_CONTEXT "qsim")
 set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
-set(_MSG_PREFIX "Checking platform support for ${_FEATURE_STRING}")
-
 macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
     set(${_FEATURE_FLAG} FALSE)
+    set(_MSG_PREFIX "Checking platform support for ${_FEATURE_STRING}")
 
     message(CHECK_START ${_MSG_PREFIX})
     if(WIN32)
