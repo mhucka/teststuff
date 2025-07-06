@@ -37,7 +37,7 @@ jobs:
   #     - run: clang++ --version
 
   print-win:
-    runs-on: windows-2022
+    runs-on: ${{matrix.os}}
     env:
       # Default shell is bash, so this should work.
       SHELLOPTS: 'xtrace'
