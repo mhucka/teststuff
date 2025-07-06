@@ -45,7 +45,7 @@ include(CheckCXXSourceRuns)
 list(APPEND CMAKE_MESSAGE_CONTEXT "qsim")
 set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
-set(_MSG_PREFIX "Testing platform support for ${_FEATURE_STRING}")
+set(_MSG_PREFIX "Checking platform support for ${_FEATURE_STRING}")
 
 macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
     set(${_FEATURE_FLAG} FALSE)
@@ -97,7 +97,7 @@ macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
         endif()
     endif()
 
-    message(CHECK_PASS _MSG_PREFIX)
+    message(CHECK_PASS _MSG_PREFIX " Done.")
 endmacro()
 
 # Small Windows C++ program to test bits in certain Intel CPU registers.
