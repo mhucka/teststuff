@@ -45,16 +45,12 @@ include(CheckCXXSourceRuns)
 list(APPEND CMAKE_MESSAGE_CONTEXT "qsim")
 set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
-message("this is the default")
-message(STATUS "this is status")
-message(VERBOSE "this is verbose")
-message(DEBUG "this is debug")
-message(TRACE "this is trace")
+set(_MSG_PREFIX "Testing platform support for ${_FEATURE_STRING}")
 
 macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
     set(${_FEATURE_FLAG} FALSE)
 
-    message(STATUS "Testing platform support for ${_FEATURE_STRING} …")
+    message(CHECK_START _MSG_PREFIX)
     if(WIN32)
         # On Windows, there's no built-in method to learn the CPU flags. Third-
         # party tools exist, but downloading & running them is a security risk.
@@ -74,11 +70,10 @@ macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
                 set(${_FEATURE_FLAG} TRUE)
             endif()
         else()
-            message(STATUS "Unable to autodetect vector instruction sets")
             if(NOT _CHECKER_COMPILED)
-                message(STATUS " (failed to compile CPU checker utility)")
+                message(CHECK_FAIL _MSG_PREFIX " failed to compile checker.")
             else()
-                message(STATUS " (got an error trying to run our CPU checker)")
+                message(CHECK_FAIL _MSG_PREFIX " failed to run checker.")
             endif()
         endif()
 
@@ -102,8 +97,7 @@ macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
         endif()
     endif()
 
-    message(STATUS "testing hardware for ${_FEATURE_STRING} … Done.")
-    message(STATUS "${_FEATURE_FLAG} = ${${_FEATURE_FLAG}}")
+    message(CHECK_PASS _MSG_PREFIX)
 endmacro()
 
 # Small Windows C++ program to test bits in certain Intel CPU registers.
