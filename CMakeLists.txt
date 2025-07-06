@@ -45,6 +45,12 @@ include(CheckCXXSourceRuns)
 list(APPEND CMAKE_MESSAGE_CONTEXT "qsim")
 set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
+message("this is the default")
+message(STATUS "this is status")
+message(VERBOSE "this is verbose")
+message(DEBUG "this is debug")
+message(TRACE "this is trace")
+
 macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
     set(${_FEATURE_FLAG} FALSE)
 

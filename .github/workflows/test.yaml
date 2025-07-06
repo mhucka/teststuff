@@ -73,7 +73,7 @@ jobs:
           set -x
           mkdir build
           cd build
-          cmake --debug-output ..
+          cmake --debug-output --log-context ..
           # cmake --build . -v
 
 
