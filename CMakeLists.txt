@@ -50,7 +50,7 @@ set(_MSG_PREFIX "Checking platform support for ${_FEATURE_STRING}")
 macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
     set(${_FEATURE_FLAG} FALSE)
 
-    message(CHECK_START _MSG_PREFIX)
+    message(CHECK_START ${_MSG_PREFIX})
     if(WIN32)
         # On Windows, there's no built-in method to learn the CPU flags. Third-
         # party tools exist, but downloading & running them is a security risk.
@@ -71,9 +71,9 @@ macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
             endif()
         else()
             if(NOT _CHECKER_COMPILED)
-                message(CHECK_FAIL _MSG_PREFIX " failed to compile checker.")
+                message(CHECK_FAIL ${_MSG_PREFIX} " failed to compile checker.")
             else()
-                message(CHECK_FAIL _MSG_PREFIX " failed to run checker.")
+                message(CHECK_FAIL ${_MSG_PREFIX} " failed to run checker.")
             endif()
         endif()
 
@@ -97,7 +97,7 @@ macro(check_cpu_support _FEATURE_STRING _FEATURE_FLAG)
         endif()
     endif()
 
-    message(CHECK_PASS _MSG_PREFIX " Done.")
+    message(CHECK_PASS ${_MSG_PREFIX} " Done.")
 endmacro()
 
 # Small Windows C++ program to test bits in certain Intel CPU registers.
