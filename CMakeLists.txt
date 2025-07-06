@@ -118,11 +118,11 @@ set(_WIN32_CHECKER_SRC "
 int main() {
     int cpuInfo[4];
     __cpuidex(cpuInfo, 1, 0);
-    std::cout << ((cpuInfo[2] & (1 << 19)) ? \"sse4.1\\n\"  : "");
-    std::cout << ((cpuInfo[2] & (1 << 20)) ? \"sse4.2\\n\"  : "");
+    std::cout << ((cpuInfo[2] & (1 << 19)) ? \"sse4.1\\n\"  : \"\");
+    std::cout << ((cpuInfo[2] & (1 << 20)) ? \"sse4.2\\n\"  : \"\");
     __cpuidex(cpuInfo, 7, 0);
-    std::cout << ((cpuInfo[1] & (1 << 5))  ? \"avx2\\n\"    : "")
-              << ((cpuInfo[1] & (1 << 16)) ? \"avx512f\\n\" : "");
+    std::cout << ((cpuInfo[1] & (1 << 5))  ? \"avx2\\n\"    : \"\")
+              << ((cpuInfo[1] & (1 << 16)) ? \"avx512f\\n\" : \"\");
     return 0;
 }
 ")
