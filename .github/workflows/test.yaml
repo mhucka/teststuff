@@ -15,6 +15,39 @@ defaults:
     shell: bash -x {0}
 
 jobs:
+  mac-pip:
+    runs-on: macos-13
+    env:
+      # Default shell is bash, so this should work.
+      SHELLOPTS: 'xtrace'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-13, windows-2025]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+          architecture: 'x64'
+
+      - run: |
+          pip install -r requirements.txt
+          pip install -r dev-requirements.txt
+
+      - run: pip install -v qsimcirq
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: failure()
+        with:
+          name: notebook-outputs
+          path: out
+
+
+
   # test:
   #   runs-on: ubuntu-24.04
   #   timeout-minutes: 5
@@ -36,20 +69,20 @@ jobs:
   #         [[ $(sysctl hw.optional.avx2_0) -eq 1 ]] && echo yes || echo no
   #     - run: clang++ --version
 
-  print-win:
-    runs-on: ${{matrix.os}}
-    env:
-      # Default shell is bash, so this should work.
-      SHELLOPTS: 'xtrace'
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-24.04, macos-13, windows-2025]
-    steps:
-      - name: Check out a copy of the git repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          fetch-depth: 1
+  # print-win:
+  #   runs-on: ${{matrix.os}}
+  #   env:
+  #     # Default shell is bash, so this should work.
+  #     SHELLOPTS: 'xtrace'
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ubuntu-24.04, macos-13, windows-2025]
+  #   steps:
+  #     - name: Check out a copy of the git repository
+  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  #       with:
+  #         fetch-depth: 1
 
       # - run: wmic cpu get
       #   continue-on-error: true
@@ -72,13 +105,13 @@ jobs:
       #   shell: cmd
       #   continue-on-error: true
 
-      - continue-on-error: true
-        run: |
-          set -x
-          mkdir build
-          cd build
-          cmake --debug-output --log-context ..
-          # cmake --build . -v
+      # - continue-on-error: true
+      #   run: |
+      #     set -x
+      #     mkdir build
+      #     cd build
+      #     cmake --debug-output --log-context ..
+      #     # cmake --build . -v
 
 
   # test:
