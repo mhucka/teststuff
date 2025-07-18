@@ -2,9 +2,7 @@
 <svg id="Cirq_logo_lockup" data-name="Cirq_logo_lockup" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5100 2000">
   <defs>
     <style>
-      svg { background-color: none; }
-      :root { color-scheme: light dark; }
-      .letter { fill: currentColor; }
+      .letter { fill:#999999; }
       .yellow { fill:#fbc02d; }
       .orange { fill:#ff8209; }
       .blue   { fill:#3965b0; }
