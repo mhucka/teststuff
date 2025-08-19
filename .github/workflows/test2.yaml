@@ -1,0 +1,33 @@
+name: Test 2
+
+on:
+  push:
+  merge_group:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      trace:
+        description: 'Turn on shell script debugging'
+        type: boolean
+
+defaults:
+  run:
+    shell: bash -x {0}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test message
+        env:
+          message: >-
+            :x:&nbsp; Foo
+            next line
+
+            one blank line
+
+
+            two blank lines
+        run: |
+          echo "${{env.message}}" >> "$GITHUB_STEP_SUMMARY"
+          exit 1
