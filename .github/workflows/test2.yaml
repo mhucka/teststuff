@@ -30,6 +30,12 @@ jobs:
             two blank lines
 
             <br>one blank line with a br before it
+
+            marker line
+
+            one blank line with a br after it<br>
+
+            one blank line
         run: |
           echo "${{env.message}}" >> "$GITHUB_STEP_SUMMARY"
           exit 1
