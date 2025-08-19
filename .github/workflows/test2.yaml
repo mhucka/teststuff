@@ -40,7 +40,7 @@ jobs:
           echo "${{env.message}}" >> "$GITHUB_STEP_SUMMARY"
           exit 1
 
-  test1:
+  test2:
     runs-on: ubuntu-latest
     steps:
       - name: Test message
