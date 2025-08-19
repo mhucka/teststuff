@@ -15,7 +15,7 @@ defaults:
     shell: bash -x {0}
 
 jobs:
-  test:
+  test1:
     runs-on: ubuntu-latest
     steps:
       - name: Test message
@@ -39,3 +39,12 @@ jobs:
         run: |
           echo "${{env.message}}" >> "$GITHUB_STEP_SUMMARY"
           exit 1
+
+  test1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test message
+        env:
+          message: ":white_check_mark:&nbsp; All labels have descriptions."
+        run: |
+          echo "${{env.message}}" >> "$GITHUB_STEP_SUMMARY"
