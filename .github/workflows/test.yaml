@@ -11,9 +11,9 @@ on:
         type: boolean
         default: true
 
-defaults:
-  run:
-    shell: bash -x {0}
+# defaults:
+#   run:
+#     shell: bash -x {0}
 
 jobs:
   test-debug:
