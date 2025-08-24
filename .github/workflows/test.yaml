@@ -9,6 +9,7 @@ on:
       trace:
         description: 'Turn on shell script debugging'
         type: boolean
+        default: true
 
 defaults:
   run:
@@ -27,7 +28,7 @@ jobs:
           echo 'SHELLOPTS' = "$SHELLOPTS"
           echo "env.SHELLOPTS = ${{env.SHELLOPTS}}"
           echo "inputs.debug = ${{inputs.debug}}"
-          echo "${{inputs.debug && 'xtrace' || '' }}"
+          echo "${{inputs.debug && 'xtrace' || 'the case for false' }}"
 
   # mac-pip:
   #   runs-on: macos-13
