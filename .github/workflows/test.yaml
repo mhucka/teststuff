@@ -27,6 +27,7 @@ jobs:
           echo 'SHELLOPTS' = "$SHELLOPTS"
           echo "env.SHELLOPTS = ${{env.SHELLOPTS}}"
           echo "inputs.debug = ${{inputs.debug}}"
+          echo "${{inputs.debug && 'xtrace' || '' }}"
 
   # mac-pip:
   #   runs-on: macos-13
