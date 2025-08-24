@@ -24,7 +24,6 @@ jobs:
     steps:
       - name: echo value
         run: |
-          set -x
           echo 'SHELLOPTS' = "$SHELLOPTS"
           echo "env.SHELLOPTS = ${{env.SHELLOPTS}}"
           echo "inputs.debug = ${{inputs.debug}}"
