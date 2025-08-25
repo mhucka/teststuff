@@ -28,6 +28,10 @@ jobs:
           echo "env.SHELLOPTS = ${{env.SHELLOPTS}}"
           echo "inputs.debug = ${{inputs.debug}}"
           echo "${{inputs.debug && 'xtrace' || 'the case for false' }}"
+          echo "${{inputs.debug == true}}"
+          echo "${{inputs.debug == 'true'}}"
+          echo "${{inputs.debug == false}}"
+          echo "${{inputs.debug == 'false'}}"
           echo "${{github.event.inputs.debug}}"
 
   # mac-pip:
