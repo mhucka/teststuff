@@ -11,9 +11,9 @@ on:
         type: boolean
         default: true
 
-# defaults:
-#   run:
-#     shell: bash -x {0}
+defaults:
+  run:
+    shell: bash -x {0}
 
 jobs:
   test-debug:
@@ -28,6 +28,7 @@ jobs:
           echo "env.SHELLOPTS = ${{env.SHELLOPTS}}"
           echo "inputs.debug = ${{inputs.debug}}"
           echo "${{inputs.debug && 'xtrace' || 'the case for false' }}"
+          echo "${{github.event.inputs.debug}}"
 
   # mac-pip:
   #   runs-on: macos-13
