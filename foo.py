@@ -1,6 +1,5 @@
 
 
-
 def function():
     print(
         "foo")
