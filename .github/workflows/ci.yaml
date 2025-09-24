@@ -57,7 +57,7 @@ permissions: read-all
 
 jobs:
   check-license-headers:
-    name: Check files for license headers
+    name: Check license headers
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -87,9 +87,8 @@ jobs:
           problems=$(go run github.com/google/addlicense@v1.2.0 -check \
             ${{inputs.debug && '-v'}} ${{steps.changes.outputs.all_changed_files}})
           if [[ -n "$problems" ]]; then
-            echo "::error::Found incorrect license headers in these files:"
             for file in "${problems[@]}"; do
-              printf "::error::%s\n" "$file"
+              printf "::error:: :x: %s\n" "$file"
             done
             exit 1
           fi
