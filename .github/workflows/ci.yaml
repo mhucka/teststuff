@@ -86,9 +86,9 @@ jobs:
           problems=$(go run github.com/google/addlicense@v1.2.0 -check \
             ${{inputs.debug && '-v'}} "${{steps.changes.outputs.all_changed_files}}")
           if [[ -n "$problems" ]]; then
-            echo "::error::Found incorrect license headers in one or more files:"
+            echo "::error::Found incorrect license headers in these files:"
             for file in "${problems[@]}"; do
-              printf "::error:%s\n" "$file"
+              printf "::error::%s\n" "$file"
             done
             exit 1
           fi
