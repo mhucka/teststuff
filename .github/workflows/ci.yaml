@@ -82,6 +82,8 @@ jobs:
 
       - name: Check that files contain appropriate license headers
         run: |
+          set +e
+
           problems=$(go run github.com/google/addlicense@v1.2.0 -check \
             ${{inputs.debug && '-v'}} "${{steps.changes.outputs.all_changed_files}}")
 
