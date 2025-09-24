@@ -83,18 +83,12 @@ jobs:
       - name: Check that files contain appropriate license headers
         run: |
           set +e
-
           problems=$(go run github.com/google/addlicense@v1.2.0 -check \
             ${{inputs.debug && '-v'}} "${{steps.changes.outputs.all_changed_files}}")
-
           if [[ -n "$problems" ]]; then
-            page="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}"
-            echo "::error::Found incorrect license headers in one or more files."
-            echo "::error::Please visit the [workflow summary]($page) for a list."
-            {
-            echo "## Found incorrect license headers in one or more files"
-            echo ""
-            echo "$problems"
-            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::Found incorrect license headers in one or more files:"
+            for file in "${problems[@]}"; do
+              printf "::error:%s\n" "$file"
+            done
             exit 1
           fi
