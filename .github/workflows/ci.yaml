@@ -55,6 +55,9 @@ concurrency:
 # Declare default workflow permissions as read only.
 permissions: read-all
 
+env:
+  copyright_holder: "me and myself, LLC"
+
 jobs:
   check-license-headers:
     name: Check license headers
@@ -82,10 +85,10 @@ jobs:
 
       - name: Check that files contain appropriate license headers
         run: |
-          set +x
           set +e
           problems=$(go run github.com/google/addlicense@v1.2.0 -check \
-            ${{inputs.debug && '-v'}} ${{steps.changes.outputs.all_changed_files}})
+            ${{inputs.debug && '-v'}} -c "${{env.copyright_holder}}" \
+            ${{steps.changes.outputs.all_changed_files}})
           if [[ -n "$problems" ]]; then
             for file in "${problems[@]}"; do
               printf "::error:: ❌ %s\n" "$file"
