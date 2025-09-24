@@ -88,7 +88,7 @@ jobs:
             ${{inputs.debug && '-v'}} ${{steps.changes.outputs.all_changed_files}})
           if [[ -n "$problems" ]]; then
             for file in "${problems[@]}"; do
-              printf "::error:: :x: %s\n" "$file"
+              printf "::error:: Failed license header check: %s\n" "$file"
             done
             exit 1
           fi
